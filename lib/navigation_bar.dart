@@ -15,7 +15,7 @@ class Navigationbar extends StatelessWidget{
           title: Padding(
             padding: const EdgeInsets.only(right: 2.0),
             child: Text(
-              'Order_ease',
+              'Orderease',
               style: GoogleFonts.acme( // Example: Using Open Sans font
                 fontSize: 20.0,
                 // fontWeight: FontWeight.bold,

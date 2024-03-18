@@ -58,7 +58,7 @@ class NewestItemsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        "Veechu Parotta",
+                        "Veech Parotta",
                         style: GoogleFonts.acme(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -67,7 +67,7 @@ class NewestItemsPage extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Taste our  veechu parotta,\nIt will become your \nfavourite",
+                        "Taste our  veech parotta,\nIt will become your \nfavourite",
                         style: GoogleFonts.acme(
                           textStyle: TextStyle(
                             fontSize: 12,

@@ -48,7 +48,7 @@ class PopularItemPage extends StatelessWidget {
                     "Mutton Briyani",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -68,7 +68,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹90",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),
@@ -131,7 +131,7 @@ class PopularItemPage extends StatelessWidget {
                     "Tandoori",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -151,7 +151,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹125",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),
@@ -214,7 +214,7 @@ class PopularItemPage extends StatelessWidget {
                     "Chicken wings",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -234,7 +234,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹85",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),
@@ -297,7 +297,7 @@ class PopularItemPage extends StatelessWidget {
                     "Kari Dosa",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -317,7 +317,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹45",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),
@@ -380,7 +380,7 @@ class PopularItemPage extends StatelessWidget {
                     "Chicken Lollipop",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -400,7 +400,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹75",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),
@@ -463,7 +463,7 @@ class PopularItemPage extends StatelessWidget {
                     "Chicken Biryani",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -483,7 +483,7 @@ class PopularItemPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("\₹100",style: TextStyle(
-                         fontSize: 17,
+                         fontSize: 15,
                          color: Colors.red,
                          fontWeight: FontWeight.bold,
                       ),

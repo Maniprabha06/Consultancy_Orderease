@@ -15,12 +15,14 @@ class _MyCarouselSliderState extends State<MyCarouselSlider>
     'assets/img2.jpg',
     'assets/img3.jpg',
     'assets/img4.jpg',
+    'assets/img8.jpg',
     'assets/img5.jpg'
   ];
   final color = [
     Colors.red,
     Colors.amber,
     Colors.teal,
+    Colors.purple,
     Colors.blueGrey,
     Colors.blue,
   ];
