@@ -18,7 +18,7 @@ class PopularItemPage extends StatelessWidget {
             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
             child: Container(
               width: 170,
-              height: 225,
+              height: 230,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -39,8 +39,9 @@ class PopularItemPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: Image.asset(
-                        "assets/mutton_briyani.jpg",
-                        height: 130,
+                        "assets/mutton_biriyani.jpg",
+                        height: 120,
+                        width: 150,
                       ),
                     ),
                    Text(
@@ -183,7 +184,7 @@ class PopularItemPage extends StatelessWidget {
              Padding(padding: EdgeInsets.symmetric(horizontal: 7),
             child: Container(
               width: 170,
-              height: 225,
+              height: 230,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -204,8 +205,9 @@ class PopularItemPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: Image.asset(
-                        "assets/chicken_wings.jpg",
-                        height: 130,
+                        "assets/chicken wings.jpg",
+                        height: 120,
+                        width: 150,
                       ),
                     ),
                    Text(
@@ -287,7 +289,8 @@ class PopularItemPage extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Image.asset(
                         "assets/kari_dosai.jpg",
-                        height: 130,
+                        height: 120,
+                        width: 150,
                       ),
                     ),
                    Text(
@@ -347,7 +350,7 @@ class PopularItemPage extends StatelessWidget {
              Padding(padding: EdgeInsets.symmetric(horizontal: 7),
             child: Container(
               width: 170,
-              height: 225,
+              height: 230,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -369,7 +372,8 @@ class PopularItemPage extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Image.asset(
                         "assets/lollipop.jpg",
-                        height: 130,
+                         height: 120,
+                        width: 150,
                       ),
                     ),
                    Text(
@@ -429,7 +433,7 @@ class PopularItemPage extends StatelessWidget {
              Padding(padding: EdgeInsets.symmetric(horizontal: 7),
             child: Container(
               width: 170,
-              height: 225,
+              height: 230,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -450,12 +454,13 @@ class PopularItemPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: Image.asset(
-                        "assets/chicken-hyderabadi-briyani-01.jpg",
-                        height: 130,
+                        "assets/chicken-hyderabadi-biryani-01.jpg",
+                        height: 120,
+                        width: 150,
                       ),
                     ),
                    Text(
-                    "Chicken Briyani",
+                    "Chicken Biryani",
                     style: GoogleFonts.acme(
                       textStyle: TextStyle(
                         fontSize: 20,
