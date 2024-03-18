@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orderease_new/navigation_bar.dart';
+
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -15,7 +15,7 @@ class CartPage extends StatelessWidget {
 
               child: Column(
                 children: [
-                  Navigationbar(),
+                  // Navigationbar(),
                   Padding(padding: EdgeInsets.only(
                     top:20,
                     left:10,
