@@ -105,9 +105,12 @@ class HomePageWidget extends StatelessWidget {
           onPressed: (){
           Navigator.pushNamed(context, "cartPage");
         },
-         child: Icon(
-          Icons.shopping_cart_checkout_outlined,size:28,color: Colors.red,
-          ),
+         child: Padding(
+           padding: const EdgeInsets.all(0),
+           child: Icon(
+            Icons.shopping_cart_checkout_outlined,size:28,color: Colors.red,
+            ),
+         ),
           backgroundColor: Colors.white,
         ),
         ),

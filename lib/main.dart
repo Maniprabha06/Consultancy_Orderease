@@ -6,8 +6,9 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     routes: {
-      '/':(context)=>Navigationbar(),
+      '/': (context) => Navigationbar(),
       "cartPage": (context) => CartPage(),
     },
   ));
 }
+

@@ -1,520 +1,151 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PopularItemPage extends StatelessWidget {
-  const PopularItemPage({super.key});
+   PopularItemPage({Key? key}) : super(key: key);
+
+  // Define a list of item data
+  final List<Map<String, dynamic>> items = [
+    {
+      "imagePath": "assets/mutton_biriyani.jpg",
+      "title": "Mutton Briyani",
+      "description": "Taste our Mutton Briyani",
+      "price": "\₹90",
+    },
+    {
+      "imagePath": "assets/tandoori.jpg",
+      "title": "Tandoori",
+      "description": "Taste our Chicken Tandoori",
+      "price": "\₹125",
+    },
+    {
+      "imagePath": "assets/chicken wings.jpg",
+      "title": "Chicken wings",
+      "description": "Taste our Famous Chicken wings",
+      "price": "\₹85",
+    },
+    {
+      "imagePath": "assets/kari_dosai.jpg",
+      "title": "Kari Dosa",
+      "description": "Taste our Famous Kari Dosa",
+      "price": "\₹45",
+    },
+    {
+      "imagePath": "assets/lollipop.jpg",
+      "title": "Chicken Lollipop",
+      "description": "Taste our Famous Lollipop",
+      "price": "\₹75",
+    },
+    {
+      "imagePath": "assets/chicken-hyderabadi-biryani-01.jpg",
+      "title": "Chicken Biryani",
+      "description": "Taste our Famous Chicken Briyani",
+      "price": "\₹100",
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 15,horizontal: 5),
-          child: Row(children: [
-            //for(int i=0;i<10;i++)
-            //single item
-            Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/mutton_biriyani.jpg",
-                        height: 120,
-                        width: 150,
-                      ),
-                    ),
-                   Text(
-                    "Mutton Briyani",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste our Mutton Briyani",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹90",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+        child: Row(
+          children: items.map((item) {
+            return buildItem(item);
+          }).toList(),
+        ),
+      ),
+    );
+  }
 
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-
-             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/tandoori.jpg",
-                        height: 120,
-                        width: 150,
-                         //height: 130,
-                      ),
-                    ),
-                   Text(
-                    "Tandoori",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste our Chicken Tandoori",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹125",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
-
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-
-
-             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/chicken wings.jpg",
-                        height: 120,
-                        width: 150,
-                      ),
-                    ),
-                   Text(
-                    "Chicken wings",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste our Famous Chinken_wings",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹85",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
-
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-
-
-             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/kari_dosai.jpg",
-                        height: 120,
-                        width: 150,
-                      ),
-                    ),
-                   Text(
-                    "Kari Dosa",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste our Famous Kari Dosa",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹45",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
-
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-
-
-             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/lollipop.jpg",
-                         height: 120,
-                        width: 150,
-                      ),
-                    ),
-                   Text(
-                    "Chicken Lollipop",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste our Famous lollipop",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹75",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
-
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-
-
-             Padding(padding: EdgeInsets.symmetric(horizontal: 7),
-            child: Container(
-              width: 170,
-              height: 230,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 10,
-                    offset: Offset(0,3),
-                  )
-                ]
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Image.asset(
-                        "assets/chicken-hyderabadi-biryani-01.jpg",
-                        height: 120,
-                        width: 150,
-                      ),
-                    ),
-                   Text(
-                    "Chicken Biryani",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    "Taste or Famous Chciken Briyani",
-                    style: GoogleFonts.acme(
-                      textStyle: TextStyle(
-                        fontSize: 15,
-                        //fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("\₹100",style: TextStyle(
-                         fontSize: 15,
-                         color: Colors.red,
-                         fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                      SizedBox(
-                          width: 30, // Adjust the width as needed
-                          height: 30, // Adjust the height as needed
-                          child: IconButton(
-                            alignment: Alignment.center,
-                            onPressed: () {
-                              // Add your onPressed function here
-                            },
-                            icon: Icon(
-                              Icons.shopping_cart_checkout_outlined,
-                              color: Colors.red,
-                              size: 18,
-                            ),
-                          ),
-                        )
-
-                    ],
-                  )
-                  ],
-                ),
-              ),
-            ),
-            ),
-              
+  // Function to build each item widget
+  Widget buildItem(Map<String, dynamic> itemData) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 7),
+      child: Container(
+        width: 170,
+        height: 230,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 10,
+              offset: Offset(0, 3),
+            )
           ],
-          )
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  itemData["imagePath"],
+                  height: 120,
+                  width: 150,
+                ),
+              ),
+              Text(
+                itemData["title"],
+                style: GoogleFonts.acme(
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 2),
+              Text(
+                itemData["description"],
+                style: GoogleFonts.acme(
+                  textStyle: TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    itemData["price"],
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: IconButton(
+                      alignment: Alignment.center,
+                      onPressed: () {
+                        // Add your onPressed function here
+                        
+                      },
+                      icon: Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: Icon(
+                          Icons.shopping_cart_checkout_outlined,
+                          color: Colors.red,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
+        ),
+      ),
     );
   }
 }
