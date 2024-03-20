@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderease_new/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orderease_new/tables.dart';
+import 'package:orderease_new/kitchen.dart';
 // import 'package:orderease_new/Carousel_Slider.dart';
 
 
@@ -68,7 +70,7 @@ class Navigationbar extends StatelessWidget{
 class Navigationcontroller extends GetxController{
   final Rx<int> selectedindex = 0.obs;
   final screens =[HomePageWidget(),
-    Container(color: Colors.green,),
-    Container(color: Colors.purple,),
+    TablePage(),
+    KitchenPage(),
   ];
 }
