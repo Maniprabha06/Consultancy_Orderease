@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_fonts:
   flutter_rating_bar:
+  icons_plus:
 
 dev_dependencies:
   flutter_test:
