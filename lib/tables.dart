@@ -28,7 +28,7 @@ class TablePage extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 255, 255, 255),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
@@ -44,7 +44,10 @@ class TablePage extends StatelessWidget {
                         flex: 3, // Take 3/4 of the available space
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
-                          child: Image.asset('assets/tableimg.jpg'),
+                          child: Image.asset(
+                            'assets/tablenum.jpg',
+                            fit: BoxFit.fill, // Adjust fit here
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),

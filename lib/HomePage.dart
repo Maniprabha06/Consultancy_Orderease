@@ -15,45 +15,7 @@ class HomePageWidget extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(15),
         children: [
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 10,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.red,
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Search here...",
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.filter_list),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20), // Adding space between the search bar and carousel slider
+          // SizedBox(height: 20), // Adding space between the search bar and carousel slider
           MyCarouselSlider(),
           Padding(
               padding: EdgeInsets.only(top: 20, left: 10),
