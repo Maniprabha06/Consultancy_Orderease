@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:orderease_new/HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:orderease_new/cart_provider.dart';
 import 'package:orderease_new/tables.dart';
 import 'package:orderease_new/kitchen.dart';
 import 'package:orderease_new/SearchPage.dart';
-import 'package:badges/badges.dart' as badges;
-import 'package:provider/provider.dart';
-import 'package:orderease_new/cartPage.dart';
+
 // import 'package:orderease_new/Carousel_Slider.dart';
 
 
@@ -32,26 +29,6 @@ class Navigationbar extends StatelessWidget{
           ),
           centerTitle: false,
           actions: [
-             InkWell(
-            onTap: (){
-          Navigator.pushNamed(context, "cartPage");
-            },
-                  child: Center(
-                      child: badges.Badge(
-                      badgeContent: Consumer<CartProvider>(
-                        builder: (context, value, child){
-                          return Text(value.getCounter().toString(),style: TextStyle(color: Colors.white));
-                        },
-                        ),
-                        
-                       //animationDuration: Duration(milliseconds: 300), // Move animationDuration here
-                        child: IconButton(
-                          icon: Icon(Icons.shopping_bag_outlined),
-                          onPressed: () {},
-                      ),
-                      ),
-                    ),
-             ),
                 IconButton(
                   icon: Icon(Icons.account_circle_sharp),
                   onPressed: () {},
