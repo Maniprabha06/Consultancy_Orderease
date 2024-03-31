@@ -11,12 +11,14 @@ class KitchenPage extends StatelessWidget {
         itemCount: 20, // Number of containers
         itemBuilder: (context, index) {
           // Build each container
-          return SizedBox(
-            height: 150, // Set the desired height
-            child: Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-                        decoration: BoxDecoration(
+          return Column(
+            children: [
+              SizedBox(
+                height: 250, // Set the desired height
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
@@ -27,20 +29,25 @@ class KitchenPage extends StatelessWidget {
                         offset: Offset(0, 3),
                       )
                     ],
+                    image: DecorationImage(
+                      image: AssetImage('assets/veggie.jpeg'), // Replace 'assets/table_image.png' with your image path
+                      fit: BoxFit.cover, // Cover the entire container
+                    ),
                   ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Align items to the center horizontally
-                crossAxisAlignment: CrossAxisAlignment.center, // Align items to the center vertically
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.table_restaurant_outlined), // Table icon
-                  SizedBox(width: 15),
+                  SizedBox(width: 5),
                   Text(
-                    'Table_${index + 01}', // Table number
+                    'Table_${index + 1}', // Table number
                     style: GoogleFonts.acme(fontSize: 16),
                   ),
                 ],
               ),
-            ),
+            ],
           );
         },
       ),

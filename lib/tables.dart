@@ -45,7 +45,7 @@ class TablePage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
                           child: Image.asset(
-                            'assets/tablenum.jpg',
+                            'assets/veg.jpeg',
                             fit: BoxFit.fill, // Adjust fit here
                           ),
                         ),
