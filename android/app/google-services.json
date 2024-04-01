@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "991713497116",
+    "project_id": "orderease-832b3",
+    "storage_bucket": "orderease-832b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991713497116:android:46c0aafc85e63366704fd9",
+        "android_client_info": {
+          "package_name": "com.example.orderease_new"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991713497116-b3piq4jbu06sucu14cfagtjkkecdtbsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1E2cH0Ku0innZJjdbszBIvYmuO1C2_fQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991713497116-b3piq4jbu06sucu14cfagtjkkecdtbsg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "991713497116-1b7ieu1o6ul43lb7mjfcg2kh2eut5m8o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ordereaseNew.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:orderease_new/screens/signup_screen.dart';
@@ -14,6 +15,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>();
   bool rememberPassword = true;
+  TextEditingController email=new TextEditingController();
+  TextEditingController pass=new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -54,6 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 40.0,
                       ),
                       TextFormField(
+                        controller: email,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -84,6 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 25.0,
                       ),
                       TextFormField(
+                        controller: pass,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -154,14 +159,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: ()async {
                             if (_formSignInKey.currentState!.validate() &&
                                 rememberPassword) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(
-                              //     content: Text('Processing Data'),
-                              //   ),
-                              // );
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: pass.text);
                               Navigator.pushNamed(context, "navBar");
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(

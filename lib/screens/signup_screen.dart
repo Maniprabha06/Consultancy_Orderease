@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:orderease_new/screens/signin_screen.dart';
@@ -14,6 +15,8 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
+  TextEditingController email=new TextEditingController();
+  TextEditingController pass=new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -88,6 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // email
                       TextFormField(
+                        controller: email,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -119,6 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       // password
                       TextFormField(
+                        controller: pass,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -184,9 +189,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async{
                             if (_formSignupKey.currentState!.validate() &&
                                 agreePersonalData) {
+                             await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.text, password: pass.text);
                                Navigator.pushNamed(context, "signin");
                              
                             } else if (!agreePersonalData) {

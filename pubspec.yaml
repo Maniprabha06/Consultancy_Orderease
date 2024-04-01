@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^2.27.2
+  firebase_auth: ^4.5.0
   get: 
   shared_preferences:
   path_provider:
