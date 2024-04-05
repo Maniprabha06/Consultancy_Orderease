@@ -1,69 +1,194 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:orderease_new/HomePage.dart';
-import 'package:orderease_new/navigation_bar.dart';
+import 'dart:ui';
 
-class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+class CartPage extends StatefulWidget {
+  final List<Map<String, dynamic>> selectedItems;
+
+  const CartPage({Key? key, required this.selectedItems}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Padding(
-            padding: const EdgeInsets.only(right: 2.0),
-            child: Text(
-              'My_Cart_Page',
-              style: GoogleFonts.acme( // Example: Using Open Sans font
-                fontSize: 20.0,
-                // fontWeight: FontWeight.bold,
-              ),
-            ),
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  List<Map<String, dynamic>> uniqueItems = [];
+  TextEditingController descriptionController = TextEditingController();
+
+
+@override
+void initState() {
+  super.initState();
+  // Initialize the uniqueItems list with the items from selectedItems
+  uniqueItems = List.from(widget.selectedItems);
+}
+
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Padding(
+        padding: const EdgeInsets.only(right: 2.0),
+        child: Text(
+          'My Cart Page',
+          style: GoogleFonts.acme(
+            fontSize: 20.0,
           ),
-          centerTitle: false,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.account_circle_sharp,
-              ),
-              onPressed: () {},
-            ),
-          ],
-          backgroundColor: Colors.pink,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-              builder: (context) => Navigationbar(),
+        ),
       ),
-    );
+      centerTitle: false,
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.account_circle_sharp),
+          onPressed: () {},
+        ),
+      ],
+      backgroundColor: Colors.pink,
+      leading: IconButton(
+        onPressed: () {
+          Navigator.of(context).pop(); // Change to pop instead of pushReplacement
+        },
+        icon: const Icon(Icons.arrow_back),
+      ),
+    ),
+    body: Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: uniqueItems.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  leading: Image.asset(
+                    uniqueItems[index]['imagePath'],
+                    width: 70,
+                    height: 70,
+                  ),
+                  title: Text(
+                    uniqueItems[index]['title'],
+                    style: GoogleFonts.acme(
+                      fontSize: 18.0,
+                      letterSpacing: .4,
+                      color: Colors.black,
+                    ),
+                  ),
+                  subtitle: Text(
+                    uniqueItems[index]['price'],
+                    style: GoogleFonts.acme(
+                      fontSize: 15.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            // Remove the item from the cart
+                            uniqueItems.removeAt(index);
+                          });
+                        },
+                        icon: Icon(
+                          Icons.delete_forever_rounded,
+                          color: Colors.red,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            // Check if the item already exists
+                            final existingIndex = uniqueItems.indexWhere(
+                                (item) => item['title'] == widget.selectedItems[index]['title']);
+                            if (existingIndex != -1) {
+                              uniqueItems[existingIndex]['quantity'] ??= 1;
+                              uniqueItems[existingIndex]['quantity']++;
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          color: Color.fromARGB(255, 248, 121, 11),
+                        ),
+                      ),
+                      Text(
+                        '${uniqueItems[index]['quantity'] ?? 1}',
+                        style: GoogleFonts.acme(
+                          fontSize: 15.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            // Decrement quantity
+                            if (uniqueItems[index]['quantity'] != null &&
+                                uniqueItems[index]['quantity']! > 1) {
+                              uniqueItems[index]['quantity']--;
+                            }
+                          });
+                        },
+                        icon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.remove_circle_outline,
+                            color: Color.fromARGB(255, 248, 121, 11),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
-            icon: const Icon(Icons.arrow_back,
-            
+          ),
+        ),
+        SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: TextField(
+            controller: descriptionController,
+            decoration: InputDecoration(
+              hintText: 'Give us suggestions if any...',
+              border: OutlineInputBorder(),
             ),
           ),
         ),
-      body: ListView(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal:10,),
-
-              child: Column(
-                children: [
-                  
-                  Padding(padding: EdgeInsets.only(
-                    top:20,
-                    left:10,
-                    bottom:10,
-                  ),
-                  child: Text("Order list"),
-                  )
-                ],
-              ),
-            ),
+        ElevatedButton(
+          
+          onPressed: () {
+            // Handle place order action
+          },
+          style: ElevatedButton.styleFrom(
+            shadowColor: Colors.blue,
+            backgroundColor: Colors.deepPurple,
+             // Change the color as per your requirement
           ),
-        ],
-      )
-    );
-  }
+          child: Text('Place Order',
+          style: GoogleFonts.acme(
+                          fontSize: 16.0,
+                          color: Colors.black,
+                        ),
+          ),
+        ),
+        SizedBox(height: 16),
+      ],
+    ),
+  );
+}
 }

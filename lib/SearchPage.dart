@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:orderease_new/cartPage.dart';
 
-class SearchPage extends StatelessWidget {
-  SearchPage({Key? key});
+class SearchPage extends StatefulWidget {
+  SearchPage({Key? key}) : super(key: key);
+
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  late List<Map<String, dynamic>> filteredItems;
+  TextEditingController _searchController = TextEditingController();
 
   final List<Map<String, dynamic>> items = [
     {
@@ -103,6 +112,41 @@ class SearchPage extends StatelessWidget {
     },
   ];
 
+  List<Map<String, dynamic>> selectedItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = items;
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredItems = items.where((item) => item["title"].toLowerCase().startsWith(query)).toList();
+    });
+  }
+
+  void addToCart(Map<String, dynamic> item) {
+    setState(() {
+      selectedItems.add(item);
+    });
+  }
+
+  void removeFromCart(int index) {
+    setState(() {
+      selectedItems.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,6 +180,7 @@ class SearchPage extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextFormField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         hintText: "Search here...",
                         border: InputBorder.none,
@@ -159,7 +204,7 @@ class SearchPage extends StatelessWidget {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     crossAxisCount: 2,
-                    children: items.map((item) {
+                    children: filteredItems.map((item) {
                       return buildItem(context, item);
                     }).toList(),
                   ),
@@ -168,6 +213,35 @@ class SearchPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: Offset(0, 3),
+              )
+            ]),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartPage(selectedItems: selectedItems)),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Icon(
+              Icons.shopping_cart_checkout_outlined,
+              size: 28,
+              color: Colors.red,
+            ),
+          ),
+          backgroundColor: Colors.white,
+        ),
       ),
     );
   }
@@ -237,24 +311,58 @@ class SearchPage extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 28.0),
-                    child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: IconButton(
-                        alignment: Alignment.center,
-                        onPressed: () {},
-                        icon: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Icon(
-                            Icons.shopping_cart_checkout_outlined,
-                            color: Colors.red,
-                            size: 18,
-                          ),
-                        ),
-                      ),
+  padding: const EdgeInsets.only(right: 28.0),
+  child: SizedBox(
+    width: 30,
+    height: 30,
+    child: IconButton(
+      alignment: Alignment.center,
+      onPressed: () {
+        addToCart(itemData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green, // Background color of the snackbar
+            content: Container(
+              height: 25, // Adjust the height as needed
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Dish added to cart',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    },
+                    icon: Center(
+                      child: Icon(
+                        Icons.close, 
+                        color: Colors.white,
+                        size: 15,
+                        )),
+                  ),
+                ],
+              ),
+            ),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      },
+      icon: Padding(
+        padding: const EdgeInsets.all(0),
+        child: Icon(
+          Icons.shopping_cart_checkout_outlined,
+          color: Colors.red,
+          size: 18,
+        ),
+      ),
+    ),
+  ),
+),
+
+
                 ],
               ),
             )
@@ -264,3 +372,9 @@ class SearchPage extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+

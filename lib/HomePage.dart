@@ -50,32 +50,32 @@ class HomePageWidget extends StatelessWidget {
         ],
       ),
 
-      //cart
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: Offset(0,3),
-            )
-          ]
-        ),
-        child: FloatingActionButton(
-          onPressed: (){
-          Navigator.pushNamed(context, "cartPage");
-        },
-         child: Padding(
-           padding: const EdgeInsets.all(0),
-           child: Icon(
-            Icons.shopping_cart_checkout_outlined,size:28,color: Colors.red,
-            ),
-         ),
-          backgroundColor: Colors.white,
-        ),
-        ),
+      // //cart
+      // floatingActionButton: Container(
+      //   decoration: BoxDecoration(
+      //     borderRadius: BorderRadius.circular(20),
+      //     boxShadow: [
+      //       BoxShadow(
+      //         color: Colors.grey.withOpacity(0.5),
+      //         spreadRadius: 2,
+      //         blurRadius: 10,
+      //         offset: Offset(0,3),
+      //       )
+      //     ]
+      //   ),
+      //   child: FloatingActionButton(
+      //     onPressed: (){
+      //     Navigator.pushNamed(context, "cartPage");
+      //   },
+      //    child: Padding(
+      //      padding: const EdgeInsets.all(0),
+      //      child: Icon(
+      //       Icons.shopping_cart_checkout_outlined,size:28,color: Colors.red,
+      //       ),
+      //    ),
+      //     backgroundColor: Colors.white,
+      //   ),
+      //   ),
     );
   }
 }

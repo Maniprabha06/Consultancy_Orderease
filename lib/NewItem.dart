@@ -169,7 +169,7 @@ class NewestItemsPage extends StatelessWidget {
                           icon: Padding(
                             padding: const EdgeInsets.all(0),
                             child: Icon(
-                              Icons.shopping_cart_checkout_outlined,
+                              Icons.favorite,
                               color: Colors.red,
                               size: 18,
                             ),

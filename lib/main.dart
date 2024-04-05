@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => WelcomeScreen(), // Route for the welcome screen
         'navBar': (context) => Navigationbar(), // Route for the navigation bar screen
         'signin': (context) => SignInScreen(), // Route for the sign-in screen
-        'cartPage': (context) => CartPage(), // Route for the cart page
+        //'cartPage': (context) => CartPage(), // Route for the cart page
       },
     );
   }
