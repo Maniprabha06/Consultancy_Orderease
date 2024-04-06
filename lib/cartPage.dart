@@ -75,21 +75,20 @@ Widget build(BuildContext context) {
                 child: ListTile(
                   leading: Image.asset(
                     uniqueItems[index]['imagePath'],
-                    width: 70,
-                    height: 70,
+                    width: 20,
+                    height: 20,
                   ),
                   title: Text(
                     uniqueItems[index]['title'],
                     style: GoogleFonts.acme(
-                      fontSize: 18.0,
-                      letterSpacing: .4,
+                      fontSize: 15.0,
                       color: Colors.black,
                     ),
                   ),
                   subtitle: Text(
                     uniqueItems[index]['price'],
                     style: GoogleFonts.acme(
-                      fontSize: 15.0,
+                      fontSize: 12.0,
                       color: Colors.black,
                     ),
                   ),
@@ -108,7 +107,7 @@ Widget build(BuildContext context) {
                           color: Colors.red,
                         ),
                       ),
-                      SizedBox(width: 10,),
+                      // SizedBox(width: 1,),
                       IconButton(
                         onPressed: () {
                           setState(() {
@@ -129,7 +128,7 @@ Widget build(BuildContext context) {
                       Text(
                         '${uniqueItems[index]['quantity'] ?? 1}',
                         style: GoogleFonts.acme(
-                          fontSize: 15.0,
+                          fontSize: 12.0,
                           color: Colors.black,
                         ),
                       ),

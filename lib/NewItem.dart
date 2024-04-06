@@ -169,7 +169,7 @@ class NewestItemsPage extends StatelessWidget {
                           icon: Padding(
                             padding: const EdgeInsets.all(0),
                             child: Icon(
-                              Icons.favorite,
+                              Icons.favorite_border,
                               color: Colors.red,
                               size: 18,
                             ),

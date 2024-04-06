@@ -154,44 +154,47 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           SizedBox(height: 20),
           Center(
-            child: Container(
-              height: 50,
-              width: 480,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 10,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.red,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: 50,
+                width: 480,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(0, 3),
                     ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: "Search here...",
-                        border: InputBorder.none,
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.red,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.filter_list),
-                  ),
-                ],
+                    Expanded(
+                      child: TextFormField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: "Search here...",
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.filter_list),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -251,7 +254,7 @@ class _SearchPageState extends State<SearchPage> {
     return Padding(
       padding: EdgeInsets.all(15),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.3,
+        width: MediaQuery.of(context).size.width * 0.9,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -273,11 +276,12 @@ class _SearchPageState extends State<SearchPage> {
                 alignment: Alignment.center,
                 child: Image.asset(
                   itemData["imagePath"],
-                  height: 120,
-                  width: 260,
+                  height: 80,
+                  width: 80,
                 ),
               ),
             ),
+            SizedBox(height: 2),
             Text(
               itemData["title"],
               style: GoogleFonts.acme(
@@ -287,16 +291,16 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            SizedBox(height: 2),
-            Text(
-              itemData["description"],
-              style: GoogleFonts.acme(
-                textStyle: TextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
+            //SizedBox(height: 2),
+            // Text(
+            //   itemData["description"],
+            //   style: GoogleFonts.acme(
+            //     textStyle: TextStyle(
+            //       fontSize: 15,
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: 1),
             Padding(
               padding: const EdgeInsets.only(left: 28.0),
               child: Row(
@@ -372,7 +376,6 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
 
 
 
