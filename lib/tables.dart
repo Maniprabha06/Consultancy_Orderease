@@ -23,7 +23,17 @@ class TablePage extends StatelessWidget {
             itemCount: 20,
             itemBuilder: (context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  // Navigate to the details page when a container is clicked
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderedFoodDetailsPage(
+                        tableNumber: index + 1,
+                      ),
+                    ),
+                  );
+                },
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                   decoration: BoxDecoration(
@@ -68,6 +78,115 @@ class TablePage extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+
+
+class OrderedFoodDetailsPage extends StatelessWidget {
+  final int tableNumber;
+
+  OrderedFoodDetailsPage({required this.tableNumber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Padding(
+          padding: const EdgeInsets.only(right: 2.0),
+          child: Text(
+            'Table $tableNumber order details...',
+            style: GoogleFonts.acme(
+              fontSize: 20.0,
+            ),
+          ),
+        ),
+        centerTitle: false,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.account_circle_sharp),
+            onPressed: () {},
+          ),
+        ],
+        backgroundColor: Colors.pink,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(20.0),
+              children: [
+                buildFoodRow('Dosa', '1'),
+                buildFoodRow('Pongal', '2'),
+                buildFoodRow('Poori', '2'),
+                // Add more food rows for other food items as needed
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(2.5),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                 style: ElevatedButton.styleFrom(
+              shadowColor: Colors.blue,
+              backgroundColor: Colors.deepPurple,
+            ),
+                onPressed: () {
+                  // Add functionality for the button
+                },
+                child: Text(
+                  'Add Items',
+                  style: GoogleFonts.acme(
+                fontSize: 16.0,
+                color: Colors.black,
+              ),
+              ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFoodRow(String itemName, String quantity) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            itemName,
+            style: TextStyle(fontSize: 16.0),
+          ),
+          Text(
+            quantity,
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ],
       ),
     );
   }

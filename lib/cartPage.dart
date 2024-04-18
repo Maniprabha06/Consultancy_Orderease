@@ -12,6 +12,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  String dropdownValue = 'Option 1';
   List<Map<String, dynamic>> uniqueItems = [];
   TextEditingController descriptionController = TextEditingController();
 
@@ -92,6 +93,27 @@ class _CartPageState extends State<CartPage> {
       ),
       body: Column(
         children: [
+          Container(
+            width:200,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+            child: DropdownButton<String>(
+                  value: dropdownValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+            dropdownValue = newValue!;
+                    });
+                  },
+                  items: <String>['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8', 'Option 9', 'Option 10', 'Option 11', 'Option 12']
+            .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+                    );
+                  }).toList(),
+                ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,

@@ -174,7 +174,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: Icon(
                         Icons.search,
                         color: Colors.red,
@@ -190,7 +190,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(6.0),
                       child: Icon(Icons.filter_list),
                     ),
                   ],
@@ -198,7 +198,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 18),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -277,11 +277,11 @@ class _SearchPageState extends State<SearchPage> {
                 child: Image.asset(
                   itemData["imagePath"],
                   height: 80,
-                  width: 80,
+                  width: 128,
                 ),
               ),
             ),
-            SizedBox(height: 2),
+            SizedBox(height: 1),
             Text(
               itemData["title"],
               style: GoogleFonts.acme(
@@ -300,7 +300,7 @@ class _SearchPageState extends State<SearchPage> {
             //     ),
             //   ),
             // ),
-            SizedBox(height: 1),
+            SizedBox(height: 0),
             Padding(
               padding: const EdgeInsets.only(left: 28.0),
               child: Row(
