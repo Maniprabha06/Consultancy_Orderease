@@ -12,40 +12,59 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  String dropdownValue = 'Option 1';
+  // Variable to hold the selected table number
+  String selectedTable = 'Table 1';
+  // List of table numbers from Table 1 to Table 20
+  List<String> tableNumbers = List.generate(20, (index) => 'Table ${index + 1}');
+  // List to hold the unique items in the cart
   List<Map<String, dynamic>> uniqueItems = [];
+  // Text controller for capturing user suggestion
   TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    uniqueItems = List.from(widget.selectedItems);
+    // Initialize uniqueItems based on selectedItems and set default quantity to 1
+    uniqueItems = widget.selectedItems.map((item) {
+      return {
+        'title': item['title'],
+        'quantity': item['quantity'] ?? 1, // Default quantity to 1 if null
+        'imagePath': item['imagePath'],
+        'price': item['price'],
+      };
+    }).toList();
   }
 
+  // Function to place an order and save data to Firestore
   Future<void> _placeOrder() async {
-    // Prepare data to be saved to Firebase
-    List<Map<String, dynamic>> orderDetails = [];
-    uniqueItems.forEach((item) {
-      orderDetails.add({
+    // Prepare data to be saved to Firestore
+    List<Map<String, dynamic>> orderDetails = uniqueItems.map((item) {
+      return {
         'itemName': item['title'],
         'count': item['quantity'],
-      });
-    });
+      };
+    }).toList();
+
+    // Retrieve suggestion from the text field
     String suggestion = descriptionController.text;
 
-    // Save order details to Firebase
     try {
+      // Save order details, table number, suggestion, and timestamp to Firestore
       await FirebaseFirestore.instance.collection('orders').add({
         'orderDetails': orderDetails,
+        'tableNumber': selectedTable,
         'suggestion': suggestion,
         'timestamp': Timestamp.now(),
       });
-      // Clear the cart and suggestion after placing the order
+
+      // Clear the cart, suggestion, and reset table number after placing the order
       setState(() {
         uniqueItems.clear();
         descriptionController.clear();
+        selectedTable = 'Table 1';
       });
-      // Show a success message or navigate to a confirmation page
+
+      // Show a success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Order placed successfully!'),
@@ -93,27 +112,25 @@ class _CartPageState extends State<CartPage> {
       ),
       body: Column(
         children: [
+          // Dropdown menu for selecting table numbers
           Container(
-            width:200,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+            width: 200,
             child: DropdownButton<String>(
-                  value: dropdownValue,
-                  onChanged: (String? newValue) {
-                    setState(() {
-            dropdownValue = newValue!;
-                    });
-                  },
-                  items: <String>['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8', 'Option 9', 'Option 10', 'Option 11', 'Option 12']
-            .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-                    );
-                  }).toList(),
-                ),
+              value: selectedTable,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedTable = newValue!;
+                });
+              },
+              items: tableNumbers.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
           ),
+          // List of items in the cart
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
@@ -157,6 +174,7 @@ class _CartPageState extends State<CartPage> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Delete item from the cart
                         IconButton(
                           onPressed: () {
                             setState(() {
@@ -168,15 +186,14 @@ class _CartPageState extends State<CartPage> {
                             color: Colors.red,
                           ),
                         ),
+                        // Increase item quantity
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              final existingIndex = uniqueItems.indexWhere(
-                                      (item) => item['title'] == widget.selectedItems[index]['title']);
-                              if (existingIndex != -1) {
-                                uniqueItems[existingIndex]['quantity'] ??= 1;
-                                uniqueItems[existingIndex]['quantity']++;
+                              if (uniqueItems[index]['quantity'] == null) {
+                                uniqueItems[index]['quantity'] = 1;
                               }
+                              uniqueItems[index]['quantity']++;
                             });
                           },
                           icon: Icon(
@@ -184,18 +201,20 @@ class _CartPageState extends State<CartPage> {
                             color: Color.fromARGB(255, 248, 121, 11),
                           ),
                         ),
+                        // Display item quantity
                         Text(
-                          '${uniqueItems[index]['quantity'] ?? 1}',
+                          '${uniqueItems[index]['quantity']}',
                           style: GoogleFonts.acme(
                             fontSize: 12.0,
                             color: Colors.black,
                           ),
                         ),
+                        // Decrease item quantity
                         IconButton(
                           onPressed: () {
                             setState(() {
                               if (uniqueItems[index]['quantity'] != null &&
-                                  uniqueItems[index]['quantity']! > 1) {
+                                  uniqueItems[index]['quantity'] > 1) {
                                 uniqueItems[index]['quantity']--;
                               }
                             });
@@ -216,6 +235,7 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           SizedBox(height: 16),
+          // Text field for user suggestion
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
@@ -226,6 +246,7 @@ class _CartPageState extends State<CartPage> {
               ),
             ),
           ),
+          // Button to place order
           ElevatedButton(
             onPressed: _placeOrder,
             style: ElevatedButton.styleFrom(

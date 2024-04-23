@@ -15,8 +15,9 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
-  TextEditingController email=new TextEditingController();
-  TextEditingController pass=new TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController pass = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -40,13 +41,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                // get started form
+                // Get started form
                 child: Form(
                   key: _formSignupKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // get started text
+                      // Get started text
                       Text(
                         'Get Started',
                         style: TextStyle(
@@ -58,7 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 40.0,
                       ),
-                      // full name
+                      // Full name field
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -74,13 +75,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -89,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // email
+                      // Email field
                       TextFormField(
                         controller: email,
                         validator: (value) {
@@ -106,13 +107,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -121,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // password
+                      // Password field
                       TextFormField(
                         controller: pass,
                         obscureText: true,
@@ -140,13 +141,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -155,7 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // i agree to the processing
+                      // Checkbox for personal data agreement
                       Row(
                         children: [
                           Checkbox(
@@ -185,21 +186,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // signup button
+                      // Sign up button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () async{
-                            if (_formSignupKey.currentState!.validate() &&
-                                agreePersonalData) {
-                             await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.text, password: pass.text);
-                               Navigator.pushNamed(context, "signin");
-                             
+                          onPressed: () async {
+                            if (_formSignupKey.currentState!.validate() && agreePersonalData) {
+                              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                email: email.text,
+                                password: pass.text,
+                              );
+                              Navigator.pushNamed(context, "signin");
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
+                                  content: Text(
+                                    'Please agree to the processing of personal data',
+                                  ),
+                                ),
                               );
                             }
                           },
@@ -209,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 30.0,
                       ),
-                      // sign up divider
+                      // Sign up divider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -242,20 +246,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(
                         height: 30.0,
                       ),
-                      // sign up social media logo
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(BoxIcons.bxl_twitter),
-                          Icon(BoxIcons.bxl_facebook),
-                          Icon(Bootstrap.google),
-                          Icon(BoxIcons.bxl_apple),
-                        ],
+                      // Google sign-up button
+                      IconButton(
+                        icon: Icon(Bootstrap.google),
+                        onPressed: () async {
+                          // Handle Google sign-in here
+                        },
                       ),
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // already have an account
+                      // Already have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

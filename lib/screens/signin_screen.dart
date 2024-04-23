@@ -1,22 +1,61 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:orderease_new/screens/signup_screen.dart';
 import 'package:orderease_new/widgets/custom_scaffold.dart';
-
 import '../theme/theme.dart';
+
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
   final _formSignInKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool rememberPassword = true;
-  TextEditingController email=new TextEditingController();
-  TextEditingController pass=new TextEditingController();
+
+  // Create an instance of GoogleSignIn
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  // Function to handle Google sign-in
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      // Attempt to authenticate with Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      // If authentication was successful
+      if (googleUser != null) {
+        // Obtain the Google authentication credentials
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+        // Create a new Firebase credential with the Google credentials
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        // Sign the user in with Firebase using the credential
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+        // Navigate to the home screen or your desired page
+        Navigator.pushNamed(context, "navBar");
+      }
+    } catch (error) {
+      print("Error signing in with Google: $error");
+      // Handle sign-in errors
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to sign in with Google: $error"),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -24,9 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
         children: [
           const Expanded(
             flex: 1,
-            child: SizedBox(
-              height: 10,
-            ),
+            child: SizedBox(height: 10),
           ),
           Expanded(
             flex: 7,
@@ -57,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 40.0,
                       ),
                       TextFormField(
-                        controller: email,
+                        controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter Email';
@@ -72,13 +109,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -88,7 +125,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: 25.0,
                       ),
                       TextFormField(
-                        controller: pass,
+                        controller: passwordController,
                         obscureText: true,
                         obscuringCharacter: '*',
                         validator: (value) {
@@ -105,13 +142,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
-                              color: Colors.black12, // Default border color
+                              color: Colors.black12,
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -144,7 +181,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           GestureDetector(
                             child: Text(
-                              'Forget password?',
+                              'Forgot password?',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: lightColorScheme.primary,
@@ -159,16 +196,25 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: ()async {
-                            if (_formSignInKey.currentState!.validate() &&
-                                rememberPassword) {
-                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email.text, password: pass.text);
-                              Navigator.pushNamed(context, "navBar");
+                          onPressed: () async {
+                            if (_formSignInKey.currentState!.validate() && rememberPassword) {
+                              try {
+                                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                                Navigator.pushNamed(context, "navBar");
+                              } catch (e) {
+                                // Handle sign-in error
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Sign-in failed. Please try again.')),
+                                );
+                              }
                             } else if (!rememberPassword) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text(
-                                        'Please agree to the processing of personal data')),
+                                    content: Text('Please agree to the processing of personal data')),
                               );
                             }
                           },
@@ -210,19 +256,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       const SizedBox(
                         height: 25.0,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(BoxIcons.bxl_twitter),
-                          Icon(BoxIcons.bxl_facebook),
-                          Icon(Bootstrap.google),
-                          Icon(BoxIcons.bxl_apple),
-                        ],
+                      // Only Google Sign-In button
+                      IconButton(
+                        icon: Icon(Bootstrap.google),
+                        onPressed: _handleGoogleSignIn,
                       ),
                       const SizedBox(
                         height: 25.0,
                       ),
-                      // don't have an account
+                      // Don't have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -237,7 +279,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (e) => const SignUpScreen(),
+                                  builder: (context) => const SignUpScreen(),
                                 ),
                               );
                             },
