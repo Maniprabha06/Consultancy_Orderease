@@ -127,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       // Password field
                       TextFormField(
                         controller: pass,
-                        obscureText: true,
+                        obscureText: _obscureText, // Use the _obscureText state variable here
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -155,18 +155,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureText ? Icons.visibility : Icons.visibility_off,
+                              _obscureText ? Icons.visibility : Icons.visibility_off, // Adjust the icon based on _obscureText
                               color: Colors.black26,
                             ),
                             onPressed: () {
                               setState(() {
+                                // Toggle the _obscureText value
                                 _obscureText = !_obscureText;
                               });
                             },
                           ),
                         ),
-
                       ),
+
                       const SizedBox(
                         height: 25.0,
                       ),

@@ -128,11 +128,11 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       TextFormField(
                         controller: passwordController,
-                        obscureText: true,
+                        obscureText: _obscureText, // Use the _obscureText state variable here
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter Password';
+                            return 'Please enter a Password';
                           }
                           return null;
                         },
@@ -156,18 +156,19 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureText ? Icons.visibility : Icons.visibility_off,
+                              _obscureText ? Icons.visibility : Icons.visibility_off, // Adjust the icon based on _obscureText
                               color: Colors.black26,
                             ),
                             onPressed: () {
                               setState(() {
+                                // Toggle the _obscureText value
                                 _obscureText = !_obscureText;
                               });
                             },
                           ),
                         ),
-
                       ),
+
                       const SizedBox(
                         height: 25.0,
                       ),
