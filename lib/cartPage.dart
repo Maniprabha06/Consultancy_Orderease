@@ -38,7 +38,7 @@ class _CartPageState extends State<CartPage> {
   // Function to place an order and save data to Firestore
   Future<void> _placeOrder() async {
     // Prepare data to be saved to Firestore
-    List<Map<String, dynamic>> orderDetails = uniqueItems.map((item) {
+    List<Map<String, dynamic>> newOrderDetails = uniqueItems.map((item) {
       return {
         'itemName': item['title'],
         'count': item['quantity'],
@@ -48,39 +48,73 @@ class _CartPageState extends State<CartPage> {
     // Retrieve suggestion from the text field
     String suggestion = descriptionController.text;
 
-    try {
-      // Save order details, table number, suggestion, and timestamp to Firestore
+    // Query to find an existing order for the selected table
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('orders')
+        .where('tableNumber', isEqualTo: selectedTable)
+        .where('closed', isEqualTo: false) // Only consider open orders
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // An existing order is found for the selected table
+      final existingOrderDoc = querySnapshot.docs.first;
+      final existingOrderData = existingOrderDoc.data();
+
+      // Retrieve existing order details
+      List<Map<String, dynamic>> existingOrderDetails = List<Map<String, dynamic>>.from(existingOrderData['orderDetails']);
+
+      // Merge the existing order details with the new order details
+      for (var newItem in newOrderDetails) {
+        bool itemExists = false;
+
+        // Check if the new item already exists in the existing order
+        for (var existingItem in existingOrderDetails) {
+          if (existingItem['itemName'] == newItem['itemName']) {
+            // Item exists, update its count
+            existingItem['count'] += newItem['count'];
+            itemExists = true;
+            break;
+          }
+        }
+
+        // If the item does not exist, add it to the existing order details
+        if (!itemExists) {
+          existingOrderDetails.add(newItem);
+        }
+      }
+
+      // Update the existing Firestore document with the merged order details
+      await existingOrderDoc.reference.update({
+        'orderDetails': existingOrderDetails,
+        'suggestion': suggestion, // Update the suggestion as well
+        'timestamp': Timestamp.now(),
+      });
+    } else {
+      // No existing order found, create a new order document
       await FirebaseFirestore.instance.collection('orders').add({
-        'orderDetails': orderDetails,
+        'orderDetails': newOrderDetails,
         'tableNumber': selectedTable,
         'suggestion': suggestion,
         'timestamp': Timestamp.now(),
+        'closed': false, // Ensure the order is marked as open
       });
-
-      // Clear the cart, suggestion, and reset table number after placing the order
-      setState(() {
-        uniqueItems.clear();
-        descriptionController.clear();
-        selectedTable = 'Table 1';
-      });
-
-      // Show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Order placed successfully!'),
-        ),
-      );
-    } catch (error) {
-      // Handle errors
-      print('Error placing order: $error');
-      // Show an error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to place order. Please try again.'),
-        ),
-      );
     }
+
+    // Clear the cart and reset the selected table and suggestion text field
+    setState(() {
+      uniqueItems.clear();
+      descriptionController.clear();
+      selectedTable = 'Table 1';
+    });
+
+    // Show a success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Order placed successfully!'),
+      ),
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
