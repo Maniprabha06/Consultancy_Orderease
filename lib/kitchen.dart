@@ -45,7 +45,7 @@ class KitchenPage extends StatelessWidget {
                         ),
                       ],
                       image: DecorationImage(
-                        image: AssetImage('assets/veggie.jpeg'), // Replace 'assets/veggie.jpeg' with your image path
+                        image: AssetImage('assets/reserved_table.jpg'), // Replace 'assets/veggie.jpeg' with your image path
                         fit: BoxFit.cover, // Cover the entire container
                       ),
                     ),
