@@ -5,6 +5,7 @@ import 'package:orderease_new/navigation_bar.dart';
 import 'package:orderease_new/cartPage.dart';
 import 'package:orderease_new/screens/signin_screen.dart';
 import 'package:orderease_new/screens/welcome_screen.dart';
+import 'package:orderease_new/ProfilePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         'navBar': (context) => Navigationbar(), // Route for the navigation bar screen
         'signin': (context) => SignInScreen(), // Route for the sign-in screen
         //'cartPage': (context) => CartPage(), // Route for the cart page
+        'profilePage': (context) => ProfilePage(),
       },
     );
   }

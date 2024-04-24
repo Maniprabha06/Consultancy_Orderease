@@ -31,8 +31,11 @@ class Navigationbar extends StatelessWidget{
           actions: [
                 IconButton(
                   icon: Icon(Icons.account_circle_sharp),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'profilePage');
+                  },
                 ),
+
               ],
           backgroundColor: Colors.pink,
           leading: IconButton(

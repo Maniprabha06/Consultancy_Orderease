@@ -18,6 +18,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool rememberPassword = true;
+  bool _obscureText = false;
+
 
   // Create an instance of GoogleSignIn
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -26,7 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _handleGoogleSignIn() async {
     try {
       // Attempt to authenticate with Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       // If authentication was successful
       if (googleUser != null) {
@@ -152,7 +154,19 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureText ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.black26,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
                         ),
+
                       ),
                       const SizedBox(
                         height: 25.0,

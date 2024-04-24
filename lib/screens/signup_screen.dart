@@ -17,6 +17,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool agreePersonalData = true;
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
+  bool _obscureText = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +153,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureText ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.black26,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          ),
                         ),
+
                       ),
                       const SizedBox(
                         height: 25.0,
