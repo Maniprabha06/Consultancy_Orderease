@@ -1,24 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:orderease_new/screens/signin_screen.dart';
 import 'package:orderease_new/theme/theme.dart';
 import 'package:orderease_new/widgets/custom_scaffold.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formSignupKey = GlobalKey<FormState>();
   bool agreePersonalData = true;
-  TextEditingController email = TextEditingController();
-  TextEditingController pass = TextEditingController();
-  bool _obscureText = false;
-
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           const Expanded(
             flex: 1,
-            child: SizedBox(
-              height: 10,
-            ),
+            child: SizedBox(height: 10),
           ),
           Expanded(
             flex: 7,
@@ -43,13 +42,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               child: SingleChildScrollView(
-                // Get started form
                 child: Form(
                   key: _formSignupKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Get started text
                       Text(
                         'Get Started',
                         style: TextStyle(
@@ -58,14 +55,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: lightColorScheme.primary,
                         ),
                       ),
-                      const SizedBox(
-                        height: 40.0,
-                      ),
+                      const SizedBox(height: 40),
                       // Full name field
                       TextFormField(
+                        controller: fullNameController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter Full name';
+                            return 'Please enter full name';
                           }
                           return null;
                         },
@@ -89,15 +85,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
+                      const SizedBox(height: 25),
                       // Email field
                       TextFormField(
-                        controller: email,
+                        controller: emailController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter Email';
+                            return 'Please enter email';
                           }
                           return null;
                         },
@@ -121,17 +115,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
+                      const SizedBox(height: 25),
                       // Password field
                       TextFormField(
-                        controller: pass,
-                        obscureText: _obscureText, // Use the _obscureText state variable here
+                        controller: passwordController,
+                        obscureText: _obscureText,
                         obscuringCharacter: '*',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter Password';
+                            return 'Please enter password';
                           }
                           return null;
                         },
@@ -155,23 +147,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureText ? Icons.visibility : Icons.visibility_off, // Adjust the icon based on _obscureText
+                              _obscureText ? Icons.visibility_off : Icons.visibility,
                               color: Colors.black26,
                             ),
                             onPressed: () {
                               setState(() {
-                                // Toggle the _obscureText value
                                 _obscureText = !_obscureText;
                               });
                             },
                           ),
                         ),
                       ),
-
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      // Checkbox for personal data agreement
+                      const SizedBox(height: 25),
+                      // Personal data agreement
                       Row(
                         children: [
                           Checkbox(
@@ -185,9 +173,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const Text(
                             'I agree to the processing of ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
+                            style: TextStyle(color: Colors.black45),
                           ),
                           Text(
                             'Personal data',
@@ -198,37 +184,56 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
-                      // Sign up button
+                      const SizedBox(height: 25),
+                      // Sign-up button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () async {
+                            // Handle sign-up action
                             if (_formSignupKey.currentState!.validate() && agreePersonalData) {
-                              await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                email: email.text,
-                                password: pass.text,
-                              );
-                              Navigator.pushNamed(context, "signin");
+                              try {
+                                // Create a new user with email and password
+                                UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+
+                                // Update the user profile to set the display name
+                                User? user = userCredential.user;
+                                await user?.updateProfile(displayName: fullNameController.text);
+
+                                // Store the user's additional information in Firestore
+                                await FirebaseFirestore.instance.collection('users').doc(user?.uid).set({
+                                  'email': user?.email,
+                                  'fullName': fullNameController.text,
+                                  // Add other user data you want to store
+                                });
+
+                                // Navigate to the sign-in screen after successful sign-up
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                                );
+                              } catch (error) {
+                                // Handle error
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Sign up failed: $error')),
+                                );
+                              }
                             } else if (!agreePersonalData) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                    'Please agree to the processing of personal data',
-                                  ),
+                                  content: Text('Please agree to the processing of personal data'),
                                 ),
                               );
                             }
                           },
-                          child: const Text('Sign up'),
+                          child: const Text('Sign Up'),
                         ),
                       ),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-                      // Sign up divider
+                      const SizedBox(height: 30),
+                      // Sign-up divider
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -239,15 +244,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal: 10,
-                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               'Sign up with',
-                              style: TextStyle(
-                                color: Colors.black45,
-                              ),
+                              style: TextStyle(color: Colors.black45),
                             ),
                           ),
                           Expanded(
@@ -258,36 +258,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
+                      const SizedBox(height: 30),
                       // Google sign-up button
                       IconButton(
                         icon: Icon(Bootstrap.google),
                         onPressed: () async {
-                          // Handle Google sign-in here
+                          // Handle Google sign-up action
+                          // This part can include code for Google authentication
                         },
                       ),
-                      const SizedBox(
-                        height: 25.0,
-                      ),
+                      const SizedBox(height: 25),
                       // Already have an account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
                             'Already have an account? ',
-                            style: TextStyle(
-                              color: Colors.black45,
-                            ),
+                            style: TextStyle(color: Colors.black45),
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (e) => const SignInScreen(),
-                                ),
+                                MaterialPageRoute(builder: (context) => SignInScreen()),
                               );
                             },
                             child: Text(
@@ -300,9 +293,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
