@@ -42,6 +42,7 @@ class _CartPageState extends State<CartPage> {
       return {
         'itemName': item['title'],
         'count': item['quantity'],
+        'price': item['price'], // Include the price field
       };
     }).toList();
 
@@ -70,8 +71,10 @@ class _CartPageState extends State<CartPage> {
         // Check if the new item already exists in the existing order
         for (var existingItem in existingOrderDetails) {
           if (existingItem['itemName'] == newItem['itemName']) {
-            // Item exists, update its count
+            // Item exists, update its count and price
             existingItem['count'] += newItem['count'];
+            // Ensure price is consistent
+            existingItem['price'] = newItem['price'];
             itemExists = true;
             break;
           }
