@@ -1,5 +1,7 @@
 import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,21 +14,88 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
   File? _imageFile;
   String _name = '';
-  int _age = 0;
-  int _experience = 0;
-  String _email = '';
-  String _city = '';
+  String? _imageUrl;
+
+  bool _isEditing = false;
+  final _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _name = userDoc['fullName'];
+          _imageUrl = userDoc['profileImageUrl'];
+          _nameController.text = _name;  // Set the initial text of the name controller
+        });
+      }
+    }
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
+    if (pickedFile != null) {
+      setState(() {
         _imageFile = File(pickedFile.path);
-      }
+      });
+      // After setting the image file, update the widget
+      await _uploadImage();
+    }
+  }
+
+
+  Future<void> _uploadImage() async {
+    final user = _auth.currentUser;
+    if (user != null && _imageFile != null) {
+      final storageRef = _storage.ref().child('profile_images/${user.uid}');
+      final uploadTask = storageRef.putFile(_imageFile!);
+
+      await uploadTask.whenComplete(() async {
+        final downloadUrl = await storageRef.getDownloadURL();
+        setState(() {
+          _imageUrl = downloadUrl;
+        });
+        await _updateUserProfile();
+      });
+    }
+  }
+
+  Future<void> _updateUserProfile() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).update({
+        'fullName': _name,
+        'profileImageUrl': _imageUrl,
+      });
+    }
+  }
+
+  void _toggleEditMode() {
+    setState(() {
+      _isEditing = !_isEditing;
     });
+  }
+
+  void _saveChanges() async {
+    setState(() {
+      _name = _nameController.text;
+    });
+    await _updateUserProfile();
+    _toggleEditMode();
   }
 
   @override
@@ -35,9 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text(
           'My Profile Page',
-          style: GoogleFonts.acme(
-            fontSize: 20.0,
-          ),
+          style: GoogleFonts.acme(fontSize: 20.0),
         ),
         centerTitle: false,
         backgroundColor: Colors.pink,
@@ -47,6 +114,13 @@ class _ProfilePageState extends State<ProfilePage> {
           },
           icon: const Icon(Icons.arrow_back),
         ),
+        actions: [
+          if (!_isEditing)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: _toggleEditMode,
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -59,87 +133,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   radius: 60,
                   backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
-                  child: _imageFile == null
-                      ? const Icon(Icons.account_circle, size: 80)
-                      : null,
+                  child: _imageFile == null ? const Icon(Icons.account_circle, size: 80) : null,
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: IconButton(
-                    onPressed: _pickImage,
-                    icon: Icon(Icons.edit),
+
+                if (_isEditing)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IconButton(
+                      onPressed: _pickImage,
+                      icon: const Icon(Icons.edit),
+                    ),
                   ),
-                ),
               ],
             ),
             const SizedBox(height: 20),
-            // Input fields for user details
-            TextFormField(
-              decoration: InputDecoration(label: const Text('Name')),
-              onChanged: (value) {
-                setState(() {
-                  _name = value;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(label: const Text('Age')),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  _age = int.tryParse(value) ?? 0;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(label: const Text('Experience')),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  _experience = int.tryParse(value) ?? 0;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(label: const Text('Email')),
-              onChanged: (value) {
-                setState(() {
-                  _email = value;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(label: const Text('City')),
-              onChanged: (value) {
-                setState(() {
-                  _city = value;
-                });
-              },
-            ),
-            const SizedBox(height: 50),
-            // Save and Cancel Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement logic to save user details
-                  },
-                  child: const Text('Save'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement logic to cancel changes
-                  },
-                  child: const Text('Cancel'),
-                ),
-              ],
-            ),
+            // Name Input
+            if (_isEditing)
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(label: Text('Name')),
+              )
+            else
+              Text(
+                _name,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            const SizedBox(height: 20),
+            // Save Button (only shown when in editing mode)
+            if (_isEditing)
+              ElevatedButton(
+                onPressed: _saveChanges,
+                child: const Text('Save'),
+              ),
           ],
         ),
       ),
