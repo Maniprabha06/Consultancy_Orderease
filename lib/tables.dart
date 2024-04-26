@@ -22,7 +22,7 @@ class TablePage extends StatelessWidget {
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
           ),
-          itemCount: 20, // Update the number of tables here
+          itemCount: 20,
           itemBuilder: (context, index) {
             int tableNumber = index + 1;
             return InkWell(
@@ -140,11 +140,23 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                     final item = orderDetails[index];
                     final itemName = item['itemName'] as String?;
                     final count = item['count'] as int?;
+                    final price = item['price']?.toString() ?? '0';
 
-                    return buildFoodRow(itemName ?? 'Unknown Item', count?.toString() ?? '0');
+                    return buildFoodRow(itemName ?? 'Unknown Item', count?.toString() ?? '0', price);
                   },
                 ),
               ),
+              if (suggestion != null && suggestion.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'Suggestion: $suggestion',
+                    style: GoogleFonts.acme(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
@@ -219,7 +231,7 @@ class OrderedFoodDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget buildFoodRow(String itemName, String quantity) {
+  Widget buildFoodRow(String itemName, String quantity, String price) {
     return Container(
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -230,6 +242,7 @@ class OrderedFoodDetailsPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(itemName),
+          Text(price),
           Text(quantity),
         ],
       ),
