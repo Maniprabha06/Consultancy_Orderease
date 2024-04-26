@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//Hello
+
 class TablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,7 @@ class TablePage extends StatelessWidget {
     );
   }
 }
+
 class OrderedFoodDetailsPage extends StatelessWidget {
   final int tableNumber;
 
@@ -144,7 +145,6 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                   },
                 ),
               ),
-              // Add the "Close Order" button at the bottom of the page
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
@@ -159,14 +159,12 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                // User selected "No"
                                 Navigator.of(context).pop(false);
                               },
                               child: Text('No'),
                             ),
                             TextButton(
                               onPressed: () {
-                                // User selected "Yes"
                                 Navigator.of(context).pop(true);
                               },
                               child: Text('Yes'),
@@ -176,26 +174,36 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                       },
                     );
 
-                    // If the user confirmed, proceed with closing the order
+                    // If the user confirmed, ask for phone number
                     if (result == true) {
-                      // Close the order by updating the Firestore document
-                      final orderDoc = await FirebaseFirestore.instance
-                          .collection('orders')
-                          .where('tableNumber', isEqualTo: 'Table $tableNumber')
-                          .orderBy('timestamp', descending: true)
-                          .limit(1)
-                          .get()
-                          .then((querySnapshot) => querySnapshot.docs.first.reference);
+                      final phoneNumber = await askForPhoneNumber(context);
+                      if (phoneNumber != null) {
+                        // If phone number is provided, proceed with closing the order
+                        final orderDoc = await FirebaseFirestore.instance
+                            .collection('orders')
+                            .where('tableNumber', isEqualTo: 'Table $tableNumber')
+                            .orderBy('timestamp', descending: true)
+                            .limit(1)
+                            .get()
+                            .then((querySnapshot) => querySnapshot.docs.first.reference);
 
-                      // Update the order document to mark the order as closed
-                      await orderDoc.update({
-                        'orderDetails': [],
-                        'suggestion': null,
-                        'closed': true, // Add a field to track if the order is closed
-                      });
+                        // Update the order document to mark the order as closed and clear order details
+                        await orderDoc.update({
+                          'orderDetails': [],
+                          'suggestion': null,
+                          'closed': true,
+                        });
 
-                      // Navigate back to the previous page after closing the order
-                      Navigator.pop(context);
+                        // Store the phone number in the 'phoneNumbers' collection
+                        await FirebaseFirestore.instance.collection('phoneNumbers').add({
+                          'phoneNumber': phoneNumber,
+                          'tableNumber': tableNumber,
+                          'timestamp': FieldValue.serverTimestamp(),
+                        });
+
+                        // Navigate back to the previous page after closing the order
+                        Navigator.pop(context);
+                      }
                     }
                   },
                   child: Text(
@@ -226,5 +234,44 @@ class OrderedFoodDetailsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<String?> askForPhoneNumber(BuildContext context) async {
+    String? phoneNumber;
+
+    final phone = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Enter Phone Number'),
+          content: TextField(
+            onChanged: (value) {
+              phoneNumber = value;
+            },
+            decoration: InputDecoration(
+              labelText: 'Phone Number',
+              hintText: 'Enter phone number here',
+            ),
+            keyboardType: TextInputType.phone,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(phoneNumber);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+
+    return phone;
   }
 }
