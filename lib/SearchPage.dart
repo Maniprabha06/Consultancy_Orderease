@@ -18,97 +18,97 @@ class _SearchPageState extends State<SearchPage> {
       "imagePath": "assets/tandoori.jpg",
       "title": "Tandoori",
       "description": "Taste our Chicken Tandoori",
-      "price": "\₹125",
+      "price": 125, // Change price to integer
     },
     {
       "imagePath": "assets/chicken wings.jpg",
       "title": "Chicken wings",
       "description": "Taste our Famous Chicken wings",
-      "price": "\₹85",
+      "price": 85, // Change price to integer
     },
     {
       "imagePath": "assets/grill.jpg",
       "title": "Grill Chicken",
       "description": "Taste our Famous Grill chicken",
-      "price": "\₹45",
+      "price": 45, // Change price to integer
     },
     {
       "imagePath": "assets/lollipop.jpg",
       "title": "Chicken Lollipop",
       "description": "Taste our Famous Lollipop",
-      "price": "\₹75",
+      "price": 75, // Change price to integer
     },
     {
       "imagePath": "assets/chicken-hyderabadi-biryani-01.jpg",
       "title": "Chicken Biryani",
       "description": "Taste our Famous Chicken Briyani",
-      "price": "\₹100",
+      "price": 100, // Change price to integer
     },
     {
       "imagePath": "assets/img2.jpg",
       "title": "Kari Dosai",
       "description": "Taste our Famous Kai Dosai",
-      "price": "\₹55",
+      "price": 55, // Change price to integer
     },
     {
       "imagePath": "assets/fish_fry.jpg",
       "title": "Fish Fry",
       "description": "Taste our Famous Fish Fry",
-      "price": "\₹50",
+      "price": 50, // Change price to integer
     },
     {
       "imagePath": "assets/mutta_veech.jpg",
       "title": "Egg Veech",
       "description": "Try our Famous Egg Veech",
-      "price": "\₹45",
+      "price": 45, // Change price to integer
     },
     {
       "imagePath": "assets/dragon_chicken.jpg",
       "title": "Dragon Chicken",
       "description": "Try our Famous Dragon Chicken",
-      "price": "\₹45",
+      "price": 45, // Change price to integer
     },
     {
       "imagePath": "assets/dosai.jpg",
       "title": "Dosai",
       "description": "Try our Famous Dosai",
-      "price": "\₹30",
+      "price": 30, // Change price to integer
     },
     {
       "imagePath": "assets/idly.jpg",
       "title": "Idly",
       "description": "Try our Famous Idly",
-      "price": "\₹15",
+      "price": 15, // Change price to integer
     },
     {
       "imagePath": "assets/mutta_parotta.jpg",
       "title": "Egg Parotta",
       "description": "Try our Famous Egg Parotta",
-      "price": "\₹30",
+      "price": 30, // Change price to integer
     },
     {
       "imagePath": "assets/mutton_gravy.jpg",
       "title": "Mutton Gravy",
       "description": "Try our Famous Mutton Gravy",
-      "price": "\₹145",
+      "price": 145, // Change price to integer
     },
     {
       "imagePath": "assets/pongal.jpeg",
       "title": "Pongal",
       "description": "Taste our Famous Pongal",
-      "price": "\₹55",
+      "price": 55, // Change price to integer
     },
     {
       "imagePath": "assets/veechu.jpg",
       "title": "Veech",
       "description": "Taste our Famous Veech",
-      "price": "\₹145",
+      "price": 145, // Change price to integer
     },
     {
       "imagePath": "assets/img5.jpg",
       "title": "Mutton Briyani",
       "description": "Taste our Mutton Briyani",
-      "price": "\₹90",
+      "price": 90, // Change price to integer
     },
   ];
 
@@ -291,15 +291,6 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            //SizedBox(height: 2),
-            // Text(
-            //   itemData["description"],
-            //   style: GoogleFonts.acme(
-            //     textStyle: TextStyle(
-            //       fontSize: 15,
-            //     ),
-            //   ),
-            // ),
             SizedBox(height: 0),
             Padding(
               padding: const EdgeInsets.only(left: 28.0),
@@ -307,7 +298,7 @@ class _SearchPageState extends State<SearchPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    itemData["price"],
+                    "₹${itemData["price"]}", // Format the integer price with currency symbol
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.red,
@@ -315,56 +306,56 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                   ),
                   Padding(
-  padding: const EdgeInsets.only(right: 28.0),
-  child: SizedBox(
-    width: 30,
-    height: 30,
-    child: IconButton(
-      alignment: Alignment.center,
-      onPressed: () {
-        addToCart(itemData);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green, // Background color of the snackbar
-            content: Container(
-              height: 25, // Adjust the height as needed
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Dish added to cart',
-                      style: TextStyle(color: Colors.white),
+                    padding: const EdgeInsets.only(right: 28.0),
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: IconButton(
+                        alignment: Alignment.center,
+                        onPressed: () {
+                          addToCart(itemData);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.green, // Background color of the snackbar
+                              content: Container(
+                                height: 25, // Adjust the height as needed
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Dish added to cart',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                      },
+                                      icon: Center(
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                            size: 15,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        icon: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: Icon(
+                            Icons.shopping_cart_checkout_outlined,
+                            color: Colors.red,
+                            size: 18,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    },
-                    icon: Center(
-                      child: Icon(
-                        Icons.close, 
-                        color: Colors.white,
-                        size: 15,
-                        )),
-                  ),
-                ],
-              ),
-            ),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      },
-      icon: Padding(
-        padding: const EdgeInsets.all(0),
-        child: Icon(
-          Icons.shopping_cart_checkout_outlined,
-          color: Colors.red,
-          size: 18,
-        ),
-      ),
-    ),
-  ),
-),
 
 
                 ],

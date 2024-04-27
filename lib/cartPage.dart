@@ -202,7 +202,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                     subtitle: Text(
-                      uniqueItems[index]['price'],
+                      '₹${uniqueItems[index]['price']}',
                       style: GoogleFonts.acme(
                         fontSize: 12.0,
                         color: Colors.black,
