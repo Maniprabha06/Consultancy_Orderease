@@ -51,6 +51,7 @@ dependencies:
   google_fonts: 
   flutter_rating_bar:
   icons_plus:
+  twilio_flutter: ^0.3.0
 
 dev_dependencies:
   flutter_test:

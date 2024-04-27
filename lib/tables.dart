@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 
 class TablePage extends StatelessWidget {
   @override
@@ -72,6 +73,13 @@ class OrderedFoodDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize TwilioFlutter with your Twilio account SID, auth token, and phone number
+    final twilioFlutter = TwilioFlutter(
+      accountSid: 'AC94961d6aa67fbfc5585c87679aec421b',
+      authToken: 'db4ffd8e51feba54b4c1e5eceb9fed67',
+      twilioNumber: '+14692405298',
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -190,7 +198,7 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                     if (result == true) {
                       final phoneNumber = await askForPhoneNumber(context);
                       if (phoneNumber != null) {
-                        // If phone number is provided, proceed with closing the order
+                        // Proceed with closing the order
                         final orderDoc = await FirebaseFirestore.instance
                             .collection('orders')
                             .where('tableNumber', isEqualTo: 'Table $tableNumber')
@@ -212,6 +220,17 @@ class OrderedFoodDetailsPage extends StatelessWidget {
                           'tableNumber': tableNumber,
                           'timestamp': FieldValue.serverTimestamp(),
                         });
+
+                        // Send a "hi" message to the stored phone number
+                        try {
+                          await twilioFlutter.sendSMS(
+                            toNumber: phoneNumber,
+                            messageBody: 'Un Alumba paathaven Un appen Shankar Whistle ah ketaven 😎',
+                          );
+                          print('Message sent successfully');
+                        } catch (e) {
+                          print('Failed to send message: $e');
+                        }
 
                         // Navigate back to the previous page after closing the order
                         Navigator.pop(context);
