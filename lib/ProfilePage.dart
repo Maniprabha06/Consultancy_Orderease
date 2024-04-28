@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -32,19 +34,37 @@ class _ProfilePageState extends State<ProfilePage>
     _loadUserData();
   }
 
-  Future<void> _loadUserData() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final userDoc = await _firestore.collection('users').doc(user.uid).get();
-      if (userDoc.exists) {
-        setState(() {
-          _name = userDoc['fullName'];
-          _imageUrl = userDoc['profileImageUrl'];
-          _nameController.text = _name;  // Set the initial text of the name controller
-        });
-      }
+ Future<void> _loadUserData() async {
+  final user = _auth.currentUser;
+  if (user != null) {
+    final userDoc = await _firestore.collection('users').doc(user.uid).get();
+    if (userDoc.exists) {
+      setState(() {
+        _name = userDoc['fullName'];
+        _imageUrl = userDoc['profileImageUrl'];
+        _nameController.text = _name;  // Set the initial text of the name controller
+      });
+    }
+
+    // Check if profile image URL is not null and load the image
+    if (_imageUrl != null) {
+      setState(() {
+        _imageFile = null; // Reset _imageFile to null to avoid showing the local image
+      });
     }
   }
+}
+
+
+  Future<void> _checkPermission() async {
+  if (await Permission.storage.request().isGranted) {
+    // Permission is granted, you can proceed with image picking
+    _pickImage();
+  } else {
+    // Permission is not granted, handle it accordingly
+    // You can show a dialog or a message to the user
+  }
+}
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -95,6 +115,7 @@ class _ProfilePageState extends State<ProfilePage>
     setState(() {
       _name = _nameController.text;
     });
+    await _uploadImage();
     await _updateUserProfile();
     _toggleEditMode();
   }
@@ -142,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage>
                     bottom: 0,
                     right: 0,
                     child: IconButton(
-                      onPressed: _pickImage,
+                      onPressed: _checkPermission,
                       icon: const Icon(Icons.edit),
                     ),
                   ),
