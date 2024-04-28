@@ -76,9 +76,9 @@ class OrderedFoodDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Initialize TwilioFlutter with your Twilio account SID, auth token, and phone number
     final twilioFlutter = TwilioFlutter(
-      accountSid: '*',//SID
-      authToken: '*',//AUTH TOKEN
-      twilioNumber: '+*',//NUMBER
+      accountSid: '==',//SID
+      authToken: '-',//AUTH TOKEN
+      twilioNumber: '+',//NUMBER
     );
 
     return Scaffold(
