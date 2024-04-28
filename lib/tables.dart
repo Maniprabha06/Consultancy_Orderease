@@ -45,7 +45,7 @@ class TablePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/veg.jpeg', // Update the asset path as needed
+                      'assets/veg.jpeg',
                       height: 100.0,
                       width: 100.0,
                     ),
@@ -74,11 +74,10 @@ class OrderedFoodDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize TwilioFlutter with your Twilio account SID, auth token, and phone number
     final twilioFlutter = TwilioFlutter(
-      accountSid: '***',//SID
-      authToken: '**',//AUTH TOKEN
-      twilioNumber: '+**',//NUMBER
+      accountSid: 'AC94961d6aa67fbfc5585c87679aec421b',
+      authToken: '6048a3927efc4e2d030182d52b25e8a3',
+      twilioNumber: '+14692405298',
     );
 
     return Scaffold(
@@ -154,7 +153,13 @@ class OrderedFoodDetailsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                  onPressed: () => _closeOrder(context, tableNumber, twilioFlutter, orderDetails, totalPrice),
+                  onPressed: () => _closeOrder(
+                      context,
+                      tableNumber,
+                      twilioFlutter,
+                      orderDetails,
+                      totalPrice
+                  ),
                   child: Text(
                     'Close Order',
                     style: GoogleFonts.acme(fontSize: 16.0),
@@ -285,10 +290,23 @@ class OrderedFoodDetailsPage extends StatelessWidget {
           return 'Item: $itemName\nCount: $count\nPrice: ₹$price\n';
         }).join('\n');
 
+        // Generate a QR code URL containing the total price
+        final qrCodeData = 'Total Price: ₹${totalPrice.toStringAsFixed(2)}';
+        // Add the QR code URL to the SMS message
+        final qrCodeUrl = 'https://your-qr-code-service.com/generate?q=' +
+            Uri.encodeComponent(qrCodeData);
+
+        final messageBody = 'BILL\n' +
+            'Order details for Table $tableNumber:\n' +
+            orderDetailsMessage +
+            '\nTotal Price: ₹${totalPrice.toStringAsFixed(2)}\n' +
+            'Thanks for visiting Kumar Mess.\n' +
+            'Scan the QR code to view the total price: ' + qrCodeUrl;
+
         try {
           await twilioFlutter.sendSMS(
             toNumber: phoneNumber,
-            messageBody: 'BILL\n'+'Order details for Table $tableNumber:\n' + orderDetailsMessage + '\nTotal Price: ₹${totalPrice.toStringAsFixed(2)}\n'+'Thanks for visiting Kumar Mess.',
+            messageBody: messageBody,
           );
           print('SMS sent successfully');
         } catch (e) {
@@ -301,30 +319,33 @@ class OrderedFoodDetailsPage extends StatelessWidget {
   }
 
   Future<String?> _askForPhoneNumber(BuildContext context) async {
-    final phoneController = TextEditingController();
+    String? phoneNumber;
 
-    final result = await showDialog<String?>(
+    final TextEditingController phoneNumberController = TextEditingController();
+
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Enter Phone Number'),
           content: TextField(
-            controller: phoneController,
+            controller: phoneNumberController,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               hintText: 'Phone Number',
+              border: OutlineInputBorder(),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(null);
+                Navigator.of(context).pop(false);
               },
               child: Text('Cancel'),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
-                Navigator.of(context).pop(phoneController.text);
+                Navigator.of(context).pop(true);
               },
               child: Text('Submit'),
             ),
@@ -333,6 +354,10 @@ class OrderedFoodDetailsPage extends StatelessWidget {
       },
     );
 
-    return result;
+    if (result == true) {
+      phoneNumber = phoneNumberController.text;
+    }
+
+    return phoneNumber;
   }
 }
