@@ -12,25 +12,25 @@ class NewestItemsPage extends StatelessWidget {
         'image': 'assets/veechu.jpg',
         'title': 'Veech Parotta',
         'description': 'Taste our veech parotta,\nIt will become your favourite',
-        'price': '\₹45',
+        'price': '\₹30',
       },
       {
         'image': 'assets/dosai.jpg',
         'title': 'Dosa',
         'description': 'Taste our Dosa,\nIt will become your favourite',
-        'price': '\₹35',
+        'price': '\₹20',
       },
       {
         'image': 'assets/mutta_parotta.jpg',
         'title': 'Mutta Parotta',
         'description': 'Taste our mutta parotta,\nIt will become your favourite',
-        'price': '\₹55',
+        'price': '\₹70',
       },
       {
         'image': 'assets/idly.jpg',
         'title': 'Idly',
         'description': 'Taste our Idly,\nIt will become your favourite',
-        'price': '\₹15',
+        'price': '\₹20',
       },
       {
         'image': 'assets/grill.jpg',
@@ -42,13 +42,13 @@ class NewestItemsPage extends StatelessWidget {
         'image': 'assets/pongal.jpeg',
         'title': 'Pongal',
         'description': 'Taste our pongal,\nIt will become your favourite',
-        'price': '\₹65',
+        'price': '\₹30',
       },
       {
         'image': 'assets/fish_fry.jpg',
         'title': 'Fish Fry',
         'description': 'Taste our Fish Fry,\nIt will become your favourite',
-        'price': '\₹45',
+        'price': '\₹100',
       },
       {
       'image': 'assets/dragon_chicken.jpg',
@@ -60,19 +60,19 @@ class NewestItemsPage extends StatelessWidget {
       'image': 'assets/mutta_veech.jpg',
       'title': 'Egg Veech',
       'description': 'Taste our Egg Veech,\nIt will become your favourite',
-      'price': '\₹85',
+      'price': '\₹50',
     },
     {
       'image': 'assets/mutton_gravy.jpg',
       'title': 'Mutton Gravy',
       'description': 'Taste our Mutton Gravy,\nIt will become your favourite',
-      'price': '\₹95',
+      'price': '\₹100',
     },
     {
       'image': 'assets/img4.jpg',
       'title': 'Parotta',
       'description': 'Taste our Parotta,\nIt will become your favourite',
-      'price': '\₹25',
+      'price': '\₹20',
     },
     ];
 

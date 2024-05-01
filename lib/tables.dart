@@ -45,7 +45,7 @@ class TablePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/veg.jpeg', // Update the asset path as needed
+                      'assets/tab.jpg', // Update the asset path as needed
                       height: 100.0,
                       width: 100.0,
                     ),

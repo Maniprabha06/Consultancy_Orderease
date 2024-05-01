@@ -18,97 +18,97 @@ class _SearchPageState extends State<SearchPage> {
       "imagePath": "assets/tandoori.jpg",
       "title": "Tandoori",
       "description": "Taste our Chicken Tandoori",
-      "price": 125, // Change price to integer
+      "price": 150, // Change price to integer
     },
     {
       "imagePath": "assets/chicken wings.jpg",
       "title": "Chicken wings",
       "description": "Taste our Famous Chicken wings",
-      "price": 85, // Change price to integer
+      "price": 180, // Change price to integer
     },
     {
       "imagePath": "assets/grill.jpg",
       "title": "Grill Chicken",
       "description": "Taste our Famous Grill chicken",
-      "price": 45, // Change price to integer
+      "price": 150, // Change price to integer
     },
     {
       "imagePath": "assets/lollipop.jpg",
       "title": "Chicken Lollipop",
       "description": "Taste our Famous Lollipop",
-      "price": 75, // Change price to integer
+      "price": 100, // Change price to integer
     },
     {
       "imagePath": "assets/chicken-hyderabadi-biryani-01.jpg",
       "title": "Chicken Biryani",
       "description": "Taste our Famous Chicken Briyani",
-      "price": 100, // Change price to integer
+      "price": 150, // Change price to integer
     },
     {
       "imagePath": "assets/img2.jpg",
       "title": "Kari Dosai",
       "description": "Taste our Famous Kai Dosai",
-      "price": 55, // Change price to integer
+      "price": 130, // Change price to integer
     },
     {
       "imagePath": "assets/fish_fry.jpg",
       "title": "Fish Fry",
       "description": "Taste our Famous Fish Fry",
-      "price": 50, // Change price to integer
+      "price": 100, // Change price to integer
     },
     {
       "imagePath": "assets/mutta_veech.jpg",
       "title": "Egg Veech",
       "description": "Try our Famous Egg Veech",
-      "price": 45, // Change price to integer
+      "price": 50, // Change price to integer
     },
     {
       "imagePath": "assets/dragon_chicken.jpg",
       "title": "Dragon Chicken",
       "description": "Try our Famous Dragon Chicken",
-      "price": 45, // Change price to integer
+      "price": 150, // Change price to integer
     },
     {
       "imagePath": "assets/dosai.jpg",
       "title": "Dosai",
       "description": "Try our Famous Dosai",
-      "price": 30, // Change price to integer
+      "price": 20, // Change price to integer
     },
     {
       "imagePath": "assets/idly.jpg",
       "title": "Idly",
       "description": "Try our Famous Idly",
-      "price": 15, // Change price to integer
+      "price": 20, // Change price to integer
     },
     {
       "imagePath": "assets/mutta_parotta.jpg",
       "title": "Egg Parotta",
       "description": "Try our Famous Egg Parotta",
-      "price": 30, // Change price to integer
+      "price": 70, // Change price to integer
     },
     {
       "imagePath": "assets/mutton_gravy.jpg",
       "title": "Mutton Gravy",
       "description": "Try our Famous Mutton Gravy",
-      "price": 145, // Change price to integer
+      "price": 100, // Change price to integer
     },
     {
       "imagePath": "assets/pongal.jpeg",
       "title": "Pongal",
       "description": "Taste our Famous Pongal",
-      "price": 55, // Change price to integer
+      "price": 30, // Change price to integer
     },
     {
       "imagePath": "assets/veechu.jpg",
       "title": "Veech",
       "description": "Taste our Famous Veech",
-      "price": 145, // Change price to integer
+      "price": 30, // Change price to integer
     },
     {
       "imagePath": "assets/img5.jpg",
       "title": "Mutton Briyani",
       "description": "Taste our Mutton Briyani",
-      "price": 90, // Change price to integer
+      "price": 200, // Change price to integer
     },
   ];
 
