@@ -29,13 +29,14 @@ class _ProfilePageState extends State<ProfilePage> {
   final _nameController = TextEditingController();
 
   // Additional variables to store order details
-  List<Map<String, dynamic>> openOrders = []; // List to hold all orders
+  List<Map<String, dynamic>> openOrders = []; // List to hold open orders
+  String selectedTable = ''; // Selected table number for order details
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
-    _retrieveAllOrders();
+    _retrieveOpenOrders();
   }
 
   Future<void> _loadUserData() async {
@@ -53,9 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  Future<void> _retrieveAllOrders() async {
-    // Query Firestore for all orders
-    final querySnapshot = await _firestore.collection('orders').get();
+  Future<void> _retrieveOpenOrders() async {
+    // Query Firestore for open orders
+    final querySnapshot = await _firestore.collection('orders').where('closed', isEqualTo: false).get();
     if (querySnapshot.docs.isNotEmpty) {
       setState(() {
         openOrders = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
@@ -212,26 +213,25 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: 20),
             // Open Orders Section
             const Text(
-              'All Orders:',
+              'Open Orders:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            // List of all orders
+            // List of open orders
             ListView.builder(
               shrinkWrap: true,
               itemCount: openOrders.length,
               itemBuilder: (context, index) {
                 final orderData = openOrders[index];
                 final tableNumber = orderData['tableNumber'];
-                final isClosed = orderData['closed'] ?? false; // Check the closed field and default to false
 
                 return ListTile(
                   title: Text(
-                    '$tableNumber ${isClosed ? '(Closed)' : ''}',
+                    'Table $tableNumber',
                     style: GoogleFonts.acme(fontSize: 16),
                   ),
                   onTap: () {
-                    // Navigate to detailed order view
+                    // Navigate to a detailed order view for the selected table
                     Navigator.push(
                       context,
                       MaterialPageRoute(
