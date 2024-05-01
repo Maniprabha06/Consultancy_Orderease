@@ -3,8 +3,40 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
+import 'package:orderease_new/table_items_page.dart';
+import 'dart:async';
 
-class TablePage extends StatelessWidget {
+
+class TablePage extends StatefulWidget {
+  @override
+  _TablePageState createState() => _TablePageState();
+}
+
+class _TablePageState extends State<TablePage> {
+  Map<int, bool> orderReadyMap = {}; // Map to track the order ready state for each table
+  Timer? orderReadyTimer; // Timer instance to manage the "Ready" badge visibility
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    orderReadyTimer?.cancel();
+    super.dispose();
+  }
+
+  void setOrderReady(int tableNumber) {
+    setState(() {
+      orderReadyMap[tableNumber] = true;
+
+      // Start a timer to hide the "Ready" badge after 10 seconds
+      orderReadyTimer?.cancel(); // Cancel any existing timer
+      orderReadyTimer = Timer(Duration(seconds: 10), () {
+        setState(() {
+          orderReadyMap[tableNumber] = false; // Hide the "Ready" badge
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,35 +59,66 @@ class TablePage extends StatelessWidget {
           itemCount: 20, // Assuming there are 20 tables
           itemBuilder: (context, index) {
             int tableNumber = index + 1;
+            bool isOrderReady = orderReadyMap[tableNumber] ?? false; // Check if the order is ready for the table
+
             return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderedFoodDetailsPage(tableNumber: tableNumber),
+                    builder: (context) => TableItemsPage(tableNumber: tableNumber),
                   ),
-                );
+                ).then((_) {
+                  // After returning from the TableItemsPage, set the order ready state
+                  setOrderReady(tableNumber);
+                });
               },
               child: Card(
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
                   children: [
-                    Image.asset(
-                      'assets/tab.jpg', // Update the asset path as needed
-                      height: 100.0,
-                      width: 100.0,
-                    ),
-                    Text(
-                      'Table $tableNumber',
-                      style: GoogleFonts.acme(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/tab.jpg', // Update the asset path as needed
+                            height: 100.0,
+                            width: 100.0,
+                          ),
+                          Text(
+                            'Table $tableNumber',
+                            style: GoogleFonts.acme(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    // Display a badge in the corner if the order is ready for the table
+                    if (isOrderReady)
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'Ready',
+                            style: GoogleFonts.acme(
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -66,6 +129,7 @@ class TablePage extends StatelessWidget {
     );
   }
 }
+
 
 class OrderedFoodDetailsPage extends StatelessWidget {
   final int tableNumber;
