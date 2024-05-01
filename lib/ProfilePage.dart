@@ -227,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 return ListTile(
                   title: Text(
-                    'Table $tableNumber',
+                    '$tableNumber',
                     style: GoogleFonts.acme(fontSize: 16),
                   ),
                   onTap: () {
