@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _imageFile;
   String _name = '';
   String? _imageUrl;
+  bool _isPermanentProfilePicture = false; // Added to track the permanent status
 
   bool _isEditing = false;
   final _nameController = TextEditingController();
@@ -40,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           _name = userDoc['fullName'];
           _imageUrl = userDoc['profileImageUrl'];
+          _isPermanentProfilePicture = userDoc['isPermanentProfilePicture'] ?? false;
           _nameController.text = _name;
         });
       }
@@ -107,6 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await _firestore.collection('users').doc(user.uid).update({
         'fullName': _name,
         'profileImageUrl': _imageUrl,
+        'isPermanentProfilePicture': true, // Set isPermanentProfilePicture to true
       });
     } else {
       print('Error: User not signed in.');
@@ -161,8 +164,12 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 CircleAvatar(
                   radius: 60,
-                  backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
-                  child: _imageFile == null ? const Icon(Icons.account_circle, size: 80) : null,
+                  backgroundImage: _imageUrl != null && _isPermanentProfilePicture
+                      ? NetworkImage(_imageUrl!)
+                      : null,
+                  child: _imageUrl == null || !_isPermanentProfilePicture
+                      ? const Icon(Icons.account_circle, size: 80)
+                      : null,
                 ),
                 if (_isEditing)
                   Positioned(
