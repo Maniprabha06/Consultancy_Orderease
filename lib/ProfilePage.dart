@@ -7,16 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
-   State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-{
+class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -34,37 +32,49 @@ class _ProfilePageState extends State<ProfilePage>
     _loadUserData();
   }
 
- Future<void> _loadUserData() async {
-  final user = _auth.currentUser;
-  if (user != null) {
-    final userDoc = await _firestore.collection('users').doc(user.uid).get();
-    if (userDoc.exists) {
-      setState(() {
-        _name = userDoc['fullName'];
-        _imageUrl = userDoc['profileImageUrl'];
-        _nameController.text = _name;  // Set the initial text of the name controller
-      });
-    }
+  Future<void> _loadUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _name = userDoc['fullName'];
+          _imageUrl = userDoc['profileImageUrl'];
+          _nameController.text = _name;
+        });
+      }
 
-    // Check if profile image URL is not null and load the image
-    if (_imageUrl != null) {
-      setState(() {
-        _imageFile = null; // Reset _imageFile to null to avoid showing the local image
-      });
+      if (_imageUrl != null) {
+        setState(() {
+          _imageFile = null;
+        });
+      }
     }
   }
-}
-
 
   Future<void> _checkPermission() async {
-  if (await Permission.storage.request().isGranted) {
-    // Permission is granted, you can proceed with image picking
-    _pickImage();
-  } else {
-    // Permission is not granted, handle it accordingly
-    // You can show a dialog or a message to the user
+    final permissionStatus = await Permission.photos.request();
+
+    if (permissionStatus.isGranted) {
+      _pickImage(); // Permission granted, proceed with image picking
+    } else if (permissionStatus.isPermanentlyDenied) {
+      // Permission permanently denied, guide the user to settings
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Permission permanently denied. Please enable photo access in settings.',
+          ),
+        ),
+      );
+      // Open app settings to allow the user to manually change permissions
+      await openAppSettings();
+    } else {
+      // Permission denied, inform the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Permission denied. Cannot access photos.')),
+      );
+    }
   }
-}
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -73,11 +83,11 @@ class _ProfilePageState extends State<ProfilePage>
       setState(() {
         _imageFile = File(pickedFile.path);
       });
-      // After setting the image file, update the widget
       await _uploadImage();
+    } else {
+      print('No image selected.');
     }
   }
-
 
   Future<void> _uploadImage() async {
     final user = _auth.currentUser;
@@ -92,6 +102,8 @@ class _ProfilePageState extends State<ProfilePage>
         });
         await _updateUserProfile();
       });
+    } else {
+      print('Error: User not signed in or image file not available.');
     }
   }
 
@@ -102,6 +114,8 @@ class _ProfilePageState extends State<ProfilePage>
         'fullName': _name,
         'profileImageUrl': _imageUrl,
       });
+    } else {
+      print('Error: User not signed in.');
     }
   }
 
@@ -111,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage>
     });
   }
 
-  void _saveChanges() async {
+  Future<void> _saveChanges() async {
     setState(() {
       _name = _nameController.text;
     });
@@ -149,7 +163,6 @@ class _ProfilePageState extends State<ProfilePage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Profile Image
             Stack(
               children: [
                 CircleAvatar(
@@ -157,7 +170,6 @@ class _ProfilePageState extends State<ProfilePage>
                   backgroundImage: _imageFile != null ? FileImage(_imageFile!) : null,
                   child: _imageFile == null ? const Icon(Icons.account_circle, size: 80) : null,
                 ),
-
                 if (_isEditing)
                   Positioned(
                     bottom: 0,
@@ -170,7 +182,6 @@ class _ProfilePageState extends State<ProfilePage>
               ],
             ),
             const SizedBox(height: 20),
-            // Name Input
             if (_isEditing)
               TextFormField(
                 controller: _nameController,
@@ -179,10 +190,9 @@ class _ProfilePageState extends State<ProfilePage>
             else
               Text(
                 _name,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             const SizedBox(height: 20),
-            // Save Button (only shown when in editing mode)
             if (_isEditing)
               ElevatedButton(
                 onPressed: _saveChanges,

@@ -10,37 +10,37 @@ class PopularItemPage extends StatelessWidget {
       "imagePath": "assets/mutton_biriyani.jpg",
       "title": "Mutton Briyani",
       "description": "Taste our Mutton Briyani",
-      "price": "\₹90",
+      "price": "\₹250",
     },
     {
       "imagePath": "assets/tandoori.jpg",
       "title": "Tandoori",
       "description": "Taste our Chicken Tandoori",
-      "price": "\₹125",
+      "price": "\₹150",
     },
     {
       "imagePath": "assets/chicken wings.jpg",
       "title": "Chicken wings",
       "description": "Taste our Famous Chicken wings",
-      "price": "\₹85",
+      "price": "\₹180",
     },
     {
       "imagePath": "assets/kari_dosai.jpg",
       "title": "Kari Dosa",
       "description": "Taste our Famous Kari Dosa",
-      "price": "\₹45",
+      "price": "\₹130",
     },
     {
       "imagePath": "assets/lollipop.jpg",
       "title": "Chicken Lollipop",
       "description": "Taste our Famous Lollipop",
-      "price": "\₹75",
+      "price": "\₹100",
     },
     {
       "imagePath": "assets/chicken-hyderabadi-biryani-01.jpg",
       "title": "Chicken Biryani",
       "description": "Taste our Famous Chicken Briyani",
-      "price": "\₹100",
+      "price": "\₹150",
     },
   ];
 
