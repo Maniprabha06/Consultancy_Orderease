@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:orderease_new/orderdetailspage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -27,10 +28,14 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isEditing = false;
   final _nameController = TextEditingController();
 
+  // Additional variables to store order details
+  List<Map<String, dynamic>> openOrders = []; // List to hold all orders
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _retrieveAllOrders();
   }
 
   Future<void> _loadUserData() async {
@@ -45,6 +50,16 @@ class _ProfilePageState extends State<ProfilePage> {
           _nameController.text = _name;
         });
       }
+    }
+  }
+
+  Future<void> _retrieveAllOrders() async {
+    // Query Firestore for all orders
+    final querySnapshot = await _firestore.collection('orders').get();
+    if (querySnapshot.docs.isNotEmpty) {
+      setState(() {
+        openOrders = querySnapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      });
     }
   }
 
@@ -195,6 +210,41 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             const SizedBox(height: 20),
+            // Open Orders Section
+            const Text(
+              'All Orders:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            // List of all orders
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: openOrders.length,
+              itemBuilder: (context, index) {
+                final orderData = openOrders[index];
+                final tableNumber = orderData['tableNumber'];
+                final isClosed = orderData['closed'] ?? false; // Check the closed field and default to false
+
+                return ListTile(
+                  title: Text(
+                    '$tableNumber ${isClosed ? '(Closed)' : ''}',
+                    style: GoogleFonts.acme(fontSize: 16),
+                  ),
+                  onTap: () {
+                    // Navigate to detailed order view
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderDetailsPage(
+                          tableNumber: tableNumber,
+                          orderDetails: orderData['orderDetails'] as List<dynamic>,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             // Save Button (only shown when in editing mode)
             if (_isEditing)
               ElevatedButton(
