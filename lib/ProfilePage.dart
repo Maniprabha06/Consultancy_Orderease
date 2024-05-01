@@ -43,12 +43,6 @@ class _ProfilePageState extends State<ProfilePage> {
           _nameController.text = _name;
         });
       }
-
-      if (_imageUrl != null) {
-        setState(() {
-          _imageFile = null;
-        });
-      }
     }
   }
 
@@ -125,11 +119,10 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  Future<void> _saveChanges() async {
+  void _saveChanges() async {
     setState(() {
       _name = _nameController.text;
     });
-    await _uploadImage();
     await _updateUserProfile();
     _toggleEditMode();
   }
@@ -163,6 +156,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // Profile Image
             Stack(
               children: [
                 CircleAvatar(
@@ -175,13 +169,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     bottom: 0,
                     right: 0,
                     child: IconButton(
-                      onPressed: _checkPermission,
+                      onPressed: _pickImage,
                       icon: const Icon(Icons.edit),
                     ),
                   ),
               ],
             ),
             const SizedBox(height: 20),
+            // Name Input
             if (_isEditing)
               TextFormField(
                 controller: _nameController,
@@ -190,9 +185,10 @@ class _ProfilePageState extends State<ProfilePage> {
             else
               Text(
                 _name,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             const SizedBox(height: 20),
+            // Save Button (only shown when in editing mode)
             if (_isEditing)
               ElevatedButton(
                 onPressed: _saveChanges,
