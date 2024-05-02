@@ -8,59 +8,65 @@ class TablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Tables',
-      //     style: GoogleFonts.acme(fontSize: 20.0),
-      //   ),
-      //   backgroundColor: Colors.pink,
-      // ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-          ),
-          itemCount: 20, // Assuming there are 20 tables
-          itemBuilder: (context, index) {
-            int tableNumber = index + 1;
-            return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderedFoodDetailsPage(tableNumber: tableNumber),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: ListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: List.generate(
+            20, // Assuming there are 20 tables
+            (index) {
+              int tableNumber = index + 1;
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderedFoodDetailsPage(tableNumber: tableNumber),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Card(
+                          elevation: 4.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Container(
+                            height: 200, // Increased container height
+                            width: 400, // Increased container width
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0), // Add border radius
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0), // Clip child with same border radius
+                              child: Image.asset(
+                                'assets/tab.jpg', // Update the asset path as needed
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Table $tableNumber',
+                          style: GoogleFonts.acme(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                );
-              },
-              child: Card(
-                elevation: 4.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/tab.jpg', // Update the asset path as needed
-                      height: 100.0,
-                      width: 100.0,
-                    ),
-                    Text(
-                      'Table $tableNumber',
-                      style: GoogleFonts.acme(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
