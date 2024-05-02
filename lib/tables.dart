@@ -8,13 +8,13 @@ class TablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Tables',
-          style: GoogleFonts.acme(fontSize: 20.0),
-        ),
-        backgroundColor: Colors.pink,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Tables',
+      //     style: GoogleFonts.acme(fontSize: 20.0),
+      //   ),
+      //   backgroundColor: Colors.pink,
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: GridView.builder(

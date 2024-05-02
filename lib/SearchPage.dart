@@ -106,7 +106,7 @@ class _SearchPageState extends State<SearchPage> {
     },
     {
       "imagePath": "assets/img5.jpg",
-      "title": "Mutton Briyani",
+      "title": "Mutton Biryani",
       "description": "Taste our Mutton Briyani",
       "price": 200, // Change price to integer
     },
@@ -129,11 +129,12 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void _onSearchChanged() {
-    String query = _searchController.text.toLowerCase();
-    setState(() {
-      filteredItems = items.where((item) => item["title"].toLowerCase().startsWith(query)).toList();
-    });
-  }
+  String query = _searchController.text.toLowerCase();
+  setState(() {
+    filteredItems = items.where((item) => item["title"].toLowerCase().contains(query)).toList();
+  });
+}
+
 
   void addToCart(Map<String, dynamic> item) {
     setState(() {

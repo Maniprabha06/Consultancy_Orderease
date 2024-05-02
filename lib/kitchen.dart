@@ -35,10 +35,19 @@ class KitchenPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Kitchen'),
-        backgroundColor: Colors.pink,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Kitchen',
+      //     style: GoogleFonts.acme(fontSize: 20.0),
+      //   ),
+      //   backgroundColor: Colors.pink,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       Navigator.of(context).pop();
+      //     },
+      //     icon: const Icon(Icons.arrow_back),
+      //   ),
+      // ),
       body: ListView.builder(
         itemCount: 20, // Number of tables
         itemBuilder: (context, index) {
