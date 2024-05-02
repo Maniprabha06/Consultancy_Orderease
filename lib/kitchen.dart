@@ -37,6 +37,7 @@ class KitchenPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Kitchen'),
+        backgroundColor: Colors.pink,
       ),
       body: ListView.builder(
         itemCount: 20, // Number of tables

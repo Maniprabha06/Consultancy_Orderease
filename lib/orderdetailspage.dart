@@ -11,8 +11,20 @@ class OrderDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order Details ($tableNumber)'),
+        title: Text(
+          'Order Details ($tableNumber)',
+          style: GoogleFonts.acme(fontSize: 20.0),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.pink,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
+
       body: ListView.builder(
         itemCount: orderDetails.length,
         itemBuilder: (context, index) {
