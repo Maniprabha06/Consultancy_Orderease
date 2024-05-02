@@ -15,7 +15,7 @@ class TablePage extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           children: List.generate(
             20, // Assuming there are 20 tables
-            (index) {
+                (index) {
               int tableNumber = index + 1;
               return Container(
                 width: MediaQuery.of(context).size.width,
