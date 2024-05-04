@@ -8,56 +8,54 @@ class TablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Tables',
+          style: GoogleFonts.acme(fontSize: 20.0),
+        ),
+        backgroundColor: Colors.pink,
+      ),
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: ListView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+        child: Column(
           children: List.generate(
             20, // Assuming there are 20 tables
                 (index) {
               int tableNumber = index + 1;
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrderedFoodDetailsPage(tableNumber: tableNumber),
-                        ),
-                      );
-                    },
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderedFoodDetailsPage(tableNumber: tableNumber),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
                     child: Column(
                       children: [
-                        Card(
-                          elevation: 4.0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Container(
-                            height: 200, // Increased container height
-                            width: 400, // Increased container width
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0), // Add border radius
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0), // Clip child with same border radius
-                              child: Image.asset(
-                                'assets/tab.jpg', // Update the asset path as needed
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image.asset(
+                            'assets/tab.jpg', // Update the asset path as needed
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Table $tableNumber',
-                          style: GoogleFonts.acme(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Table $tableNumber',
+                            style: GoogleFonts.acme(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -80,11 +78,10 @@ class OrderedFoodDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize TwilioFlutter with your Twilio account SID, auth token, and phone number
     final twilioFlutter = TwilioFlutter(
-      accountSid: '+',//SID
-      authToken: '+',//AUTH TOKEN
-      twilioNumber: '+*',//NUMBER
+      accountSid: '*',//SID
+      authToken: '*',//AUTH TOKEN
+      twilioNumber: '+',//NUMBER
     );
 
     return Scaffold(
@@ -236,7 +233,8 @@ class OrderedFoodDetailsPage extends StatelessWidget {
       TwilioFlutter twilioFlutter,
       List<dynamic> orderDetails,
       double totalPrice) async {
-    final result = await showDialog<bool>(
+    // Show confirmation dialog
+    final confirmResult = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -260,48 +258,105 @@ class OrderedFoodDetailsPage extends StatelessWidget {
       },
     );
 
-    if (result == true) {
-      final phoneNumber = await _askForPhoneNumber(context);
-      if (phoneNumber != null) {
-        final orderDoc = await FirebaseFirestore.instance
-            .collection('orders')
-            .where('tableNumber', isEqualTo: 'Table $tableNumber')
-            .orderBy('timestamp', descending: true)
-            .limit(1)
-            .get()
-            .then((querySnapshot) => querySnapshot.docs.first.reference);
-
-        await orderDoc.update({
-          'orderDetails': [],
-          'suggestion': null,
-          'closed': true,
-        });
-
-        await FirebaseFirestore.instance.collection('phoneNumbers').add({
-          'phoneNumber': phoneNumber,
-          'tableNumber': tableNumber,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-
-        final orderDetailsMessage = orderDetails.map((item) {
-          final itemName = item['itemName'] as String?;
-          final count = item['count'] as int?;
-          final price = double.tryParse(item['price']?.toString() ?? '0') ?? 0;
-
-          return 'Item: $itemName\nCount: $count\nPrice: ₹$price\n';
-        }).join('\n');
-
-        try {
-          await twilioFlutter.sendSMS(
-            toNumber: phoneNumber,
-            messageBody: 'KUMAR MESS PVT LTD\n'+'YOUR BILL\n'+'Order details for Table $tableNumber:\n' + orderDetailsMessage + '\nTotal Price: ₹${totalPrice.toStringAsFixed(2)}\n'+'Thanks for visiting Kumar Mess.',
+    if (confirmResult == true) {
+      // Show the bill details in a pop-up dialog
+      final billResult = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Bill for Table $tableNumber'),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Display order details
+                  for (var item in orderDetails)
+                    Text(
+                      'Item: ${item['itemName']}\nCount: ${item['count']}\nPrice: ₹${item['price']}\n',
+                      style: GoogleFonts.acme(fontSize: 14),
+                    ),
+                  SizedBox(height: 8),
+                  // Display total price
+                  Text(
+                    'Total Price: ₹${totalPrice.toStringAsFixed(2)}',
+                    style: GoogleFonts.acme(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Proceed'),
+              ),
+            ],
           );
-          print('SMS sent successfully');
-        } catch (e) {
-          print('Failed to send SMS: $e');
-        }
+        },
+      );
 
-        Navigator.pop(context);
+      if (billResult == true) {
+        // Ask for phone number
+        final phoneNumber = await _askForPhoneNumber(context);
+        if (phoneNumber != null) {
+          // Fetch order document reference
+          final orderDoc = await FirebaseFirestore.instance
+              .collection('orders')
+              .where('tableNumber', isEqualTo: 'Table $tableNumber')
+              .orderBy('timestamp', descending: true)
+              .limit(1)
+              .get()
+              .then((querySnapshot) => querySnapshot.docs.first.reference);
+
+          // Update order to mark as closed
+          await orderDoc.update({
+            'orderDetails': [],
+            'suggestion': null,
+            'closed': true,
+          });
+
+          await FirebaseFirestore.instance.collection('phoneNumbers').add({
+            'phoneNumber': phoneNumber,
+            'tableNumber': tableNumber,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+
+          // Construct the order details message for SMS
+          final orderDetailsMessage = orderDetails.map((item) {
+            final itemName = item['itemName'] as String?;
+            final count = item['count'] as int?;
+            final price = double.tryParse(item['price']?.toString() ?? '0') ?? 0;
+
+            return 'Item: $itemName\nCount: $count\nPrice: ₹$price\n';
+          }).join('\n');
+
+          // Construct the full bill details message
+          final billDetails = 'KUMAR MESS PVT LTD\nYOUR BILL\nOrder details for Table $tableNumber:\n$orderDetailsMessage\nTotal Price: ₹${totalPrice.toStringAsFixed(2)}\nThanks for visiting Kumar Mess.';
+
+          // Send SMS with the bill details
+          try {
+            await twilioFlutter.sendSMS(
+              toNumber: phoneNumber,
+              messageBody: billDetails,
+            );
+            print('SMS sent successfully');
+          } catch (e) {
+            print('Failed to send SMS: $e');
+          }
+
+          // Go back after closing the order
+          Navigator.pop(context);
+        }
       }
     }
   }
