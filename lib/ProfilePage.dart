@@ -23,14 +23,13 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _imageFile;
   String _name = '';
   String? _imageUrl;
-  bool _isPermanentProfilePicture = false; // Added to track the permanent status
+  bool _isPermanentProfilePicture = false;
 
   bool _isEditing = false;
   final _nameController = TextEditingController();
 
-  // Additional variables to store order details
-  List<Map<String, dynamic>> openOrders = []; // List to hold open orders
-  String selectedTable = ''; // Selected table number for order details
+  List<Map<String, dynamic>> openOrders = [];
+  String selectedTable = '';
 
   @override
   void initState() {
@@ -55,7 +54,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _retrieveOpenOrders() async {
-    // Query Firestore for open orders
     final querySnapshot = await _firestore.collection('orders').where('closed', isEqualTo: false).get();
     if (querySnapshot.docs.isNotEmpty) {
       setState(() {
@@ -68,20 +66,15 @@ class _ProfilePageState extends State<ProfilePage> {
     final permissionStatus = await Permission.photos.request();
 
     if (permissionStatus.isGranted) {
-      _pickImage(); // Permission granted, proceed with image picking
+      _pickImage();
     } else if (permissionStatus.isPermanentlyDenied) {
-      // Permission permanently denied, guide the user to settings
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Permission permanently denied. Please enable photo access in settings.',
-          ),
+          content: Text('Permission permanently denied. Please enable photo access in settings.'),
         ),
       );
-      // Open app settings to allow the user to manually change permissions
       await openAppSettings();
     } else {
-      // Permission denied, inform the user
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Permission denied. Cannot access photos.')),
       );
@@ -108,11 +101,15 @@ class _ProfilePageState extends State<ProfilePage> {
       final uploadTask = storageRef.putFile(_imageFile!);
 
       await uploadTask.whenComplete(() async {
-        final downloadUrl = await storageRef.getDownloadURL();
-        setState(() {
-          _imageUrl = downloadUrl;
-        });
-        await _updateUserProfile();
+        try {
+          final downloadUrl = await storageRef.getDownloadURL();
+          setState(() {
+            _imageUrl = downloadUrl;
+          });
+          await _updateUserProfile();
+        } catch (e) {
+          print('Error getting download URL: $e');
+        }
       });
     } else {
       print('Error: User not signed in or image file not available.');
@@ -125,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await _firestore.collection('users').doc(user.uid).update({
         'fullName': _name,
         'profileImageUrl': _imageUrl,
-        'isPermanentProfilePicture': true, // Set isPermanentProfilePicture to true
+        'isPermanentProfilePicture': true,
       });
     } else {
       print('Error: User not signed in.');
@@ -138,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void _saveChanges() async {
+  Future<void> _saveChanges() async {
     setState(() {
       _name = _nameController.text;
     });
@@ -175,7 +172,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Profile Image
             Stack(
               children: [
                 CircleAvatar(
@@ -199,7 +195,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             const SizedBox(height: 20),
-            // Name Input
             if (_isEditing)
               TextFormField(
                 controller: _nameController,
@@ -211,13 +206,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             const SizedBox(height: 20),
-            // Open Orders Section
             const Text(
               'Open Orders:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            // List of open orders
             ListView.builder(
               shrinkWrap: true,
               itemCount: openOrders.length,
@@ -227,11 +220,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 return ListTile(
                   title: Text(
-                    ' $tableNumber',
+                    'Table $tableNumber',
                     style: GoogleFonts.acme(fontSize: 16),
                   ),
                   onTap: () {
-                    // Navigate to a detailed order view for the selected table
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -245,7 +237,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
             ),
-            // Save Button (only shown when in editing mode)
             if (_isEditing)
               ElevatedButton(
                 onPressed: _saveChanges,
